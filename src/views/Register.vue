@@ -73,6 +73,7 @@
 import { ref } from 'vue';
 import { reactive } from 'vue';
 import axios from "axios";
+import { useRouter } from 'vue-router';
 
 export default {
     name: 'RegisterForm',
@@ -153,6 +154,7 @@ export default {
                 callback()
             }
         };
+        const router = useRouter();
         const submitForm = () => {
           const formData  = {
             userName: form.userName,
@@ -169,6 +171,9 @@ export default {
                   // 如果返回码是1，表示成功
                   activeStep.value++
                   alert("Registration is successful");
+                  setTimeout(() => {
+                    router.push({ name: 'Login' });
+                  }, 2000);
                 } else {
                   console.error("Registration failed:", response.data.msg);
                 }
