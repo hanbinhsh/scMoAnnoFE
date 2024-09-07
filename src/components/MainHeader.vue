@@ -4,8 +4,12 @@
         <el-menu-item index="0">
             <img style="width: 50px" src="../assets/logo.png" alt="logo" />
         </el-menu-item>
-        <el-menu-item index="1">Login</el-menu-item>
-        <el-menu-item index="2">Register</el-menu-item>
+        <el-menu-item index="1">
+            <router-link to="/login">Login</router-link>
+        </el-menu-item>
+        <el-menu-item index="2">
+            <router-link to="/register">Register</router-link>
+        </el-menu-item>
         <el-sub-menu index="3">
             <template #title>Workspace</template>
             <el-menu-item index="3-1">item one</el-menu-item>
