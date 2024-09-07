@@ -4,6 +4,10 @@ import HomeView from '../views/HomeView.vue'
 const routes = [
   {
     path: '/',
+    redirect: '/HomeView', // 当访问 '/' 时，重定向到 '/HomeView'
+  },
+  {
+    path: '/HomeView',
     name: 'home',
     component: HomeView
   },
@@ -21,6 +25,13 @@ const routes = [
     component: () => import('../views/Register.vue'),
     meta: { title: '用户注册' }
   },
+    component: () => import('../views/AboutView.vue')
+  },
+  {
+    path: '/workspace',
+    name: 'workspace',
+    component: () => import('../views/WorkSpace.vue')
+  }
 ]
 
 const router = createRouter({

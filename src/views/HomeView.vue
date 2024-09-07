@@ -12,7 +12,7 @@
       </section>
       <section class="intro-section">
         <div class="intro-container">
-          <div class="intro-text" :class="{ 'animate-text': animate }">
+          <div class="intro-text">
             <h1>scMoAnno: A Pre-trained Cell Type Annotation Method for Single-cell Multi-omics Data</h1>
             <p> Cell type annotation is paramount for subsequent biomedical research endeavors. Recently, supervised
               classification methods based on deep learning have demonstrated significant advancements in cell type
@@ -32,7 +32,7 @@
               cells, explaining how our model’s enhancement of cell type annotation performance yields positive effects.
             </p>
           </div>
-          <div class="intro-image" :class="{ 'animate-text': animate }">
+          <div class="intro-image">
             <img src="@/assets/model.png" alt="介绍图片" />
           </div>
         </div>
@@ -42,117 +42,7 @@
 </template>
 
 <style scoped>
-.main-page {
-  scroll-snap-type: y mandatory;
-  overflow-y: scroll;
-  height: 100vh;
-}
 
-.fullscreen-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f0f0f0;
-  position: relative;
-  scroll-snap-align: start;
-}
-
-.logo-container {
-  text-align: center;
-}
-
-.logo {
-  width: 150px;
-  height: auto;
-}
-
-.scroll-indicator {
-  position: absolute;
-  bottom: 20px;
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateY(0);
-  }
-
-  40% {
-    transform: translateY(-10px);
-  }
-
-  60% {
-    transform: translateY(-5px);
-  }
-}
-
-.intro-section {
-  height: 100vh;
-  padding: 40px 40px 0px 40px;
-  background-color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  scroll-snap-align: start;
-}
-
-.intro-content {
-  max-width: 600px;
-  text-align: left;
-}
-
-.intro-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%;
-  padding: 0 40px;
-  width: 100%;
-  max-width: 1600px;
-  margin: auto;
-}
-
-.intro-text {
-  flex: 1;
-  padding-right: 80px;
-  text-align: justify;
-  transform: translateY(-30px); /* 初始位置：向上偏移 */
-}
-
-.intro-image {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transform: translateY(30px); /* 初始位置：向下偏移 */
-}
-
-.intro-text,
-.intro-image {
-  opacity: 0; /* 初始状态透明 */
-  transition: opacity 1s ease, transform 1s ease; /* 添加过渡效果 */
-}
-
-.animate-text {
-  opacity: 1;
-  transform: translateY(0); /* 文字从上往下滑动 */
-}
-
-.animate-image {
-  opacity: 1;
-  transform: translateY(0); /* 图片从下往上滑动 */
-}
-
-.intro-image img {
-  max-width: 100%;
-  height: auto;
-}
 </style>
 
 <script>
