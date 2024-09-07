@@ -35,6 +35,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import { useRouter } from 'vue-router';
+const router = useRouter();
 export default {
   name: "LoginView",
   data() {
@@ -46,15 +49,16 @@ export default {
     };
   },
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert("Login successful!");
-        } else {
-          console.log("Error submitting form!");
-          return false;
-        }
-      });
+    async submitForm() {
+      const response = await axios.post('/api/login', { userName: this.loginForm.username, password: this.loginForm.password });
+      if(response.data.code == 200) {
+        sessionStorage.setItem('userData', JSON.stringify(response.data.data));
+        window.location.href = '/HomeView';
+      }       
+      else
+        this.$alert('<strong>' + response.data.msg + '</strong>', "login failed", {
+          dangerouslyUseHTMLString: true
+        });
     },
   },
 };
