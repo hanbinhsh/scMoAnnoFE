@@ -20,7 +20,12 @@ const routes = [
     path: '/workspace',
     name: 'workspace',
     component: () => import('../views/WorkSpace.vue')
-  }
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/loginView.vue')
+  },
 ]
 
 const router = createRouter({

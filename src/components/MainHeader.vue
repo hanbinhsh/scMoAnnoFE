@@ -4,7 +4,7 @@
         <el-menu-item index="HomeView">
             <img style="width: 50px" src="../assets/logo.png" alt="logo" />
         </el-menu-item>
-        <el-menu-item index="1">Login</el-menu-item>
+        <el-menu-item index="login">Login</el-menu-item>
         <el-menu-item index="2">Register</el-menu-item>
         <el-menu-item index="WorkSpace">Workspace</el-menu-item>
     </el-menu>
