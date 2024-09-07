@@ -2,9 +2,9 @@
   <div class="main-page">
     <MainHeader></MainHeader>
     <section class="upload-section">
-      <!-- 第一排：三个上传框 -->
-      <div class="upload-row">
-        <el-upload class="upload" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :limit="1" :auto-upload="false">
+      <div class="upload-row" id="upload-row">
+        <el-upload class="upload" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :limit="1"
+          :auto-upload="false">
           <el-icon class="el-icon--upload"><upload-filled /></el-icon>
           <div class="el-upload__text">
             Drop file here or <em>click to upload</em>
@@ -16,7 +16,8 @@
           </template>
         </el-upload>
 
-        <el-upload class="upload" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :limit="1" :auto-upload="false">
+        <el-upload class="upload" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :limit="1"
+          :auto-upload="false">
           <el-icon class="el-icon--upload"><upload-filled /></el-icon>
           <div class="el-upload__text">
             Drop file here or <em>click to upload</em>
@@ -28,7 +29,8 @@
           </template>
         </el-upload>
 
-        <el-upload class="upload" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :limit="1" :auto-upload="false">
+        <el-upload class="upload" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :limit="1"
+          :auto-upload="false">
           <el-icon class="el-icon--upload"><upload-filled /></el-icon>
           <div class="el-upload__text">
             Drop file here or <em>click to upload</em>
@@ -41,19 +43,27 @@
         </el-upload>
       </div>
 
-      <!-- 第二排：显示图片 -->
-      <div class="image-row">
+      <div class="image-row" id="image-row">
         <img src="@/assets/model.png" alt="Example" class="example-image" />
       </div>
 
-      <!-- 第三排：三个按钮 -->
       <div class="button-row">
+        <el-button type="default" class="action-button" @click="open = true"
+        ref="ref3">Toturial</el-button>
         <el-button type="primary" class="action-button">Example</el-button>
         <el-button type="warning" class="action-button">Reset</el-button>
-        <el-button type="success" class="action-button">Upload</el-button>
+        <el-button type="success" class="action-button" id="button-row">Upload</el-button>
       </div>
     </section>
   </div>
+  <el-tour v-model="open">
+    <el-tour-step target="#image-row" title="Model" description="Our scMoAnno Model" />
+    <el-tour-step target="#upload-row" title="Upload File">
+      <div>Put you files here.</div>
+    </el-tour-step>
+    <el-tour-step target="#button-row" title="Upload" description="Click to upload" />
+    <el-tour-step target="#WorkSpase" title="Results" description="Results will be shown here" />
+  </el-tour>
 </template>
 
 <script>
@@ -72,6 +82,9 @@ export default {
 
 <script setup>
 import { UploadFilled } from "@element-plus/icons-vue";
+
+import { ref } from 'vue'
+const open = ref(false)
 </script>
 
 <style scoped>

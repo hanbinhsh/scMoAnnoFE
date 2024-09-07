@@ -2,11 +2,11 @@
   <div class="main-page">
     <MainHeader></MainHeader>
     <div>
-      <section class="fullscreen-mainpage-section">
+      <section class="fullscreen-mainpage-section with-background">
         <div class="logo-container">
           <img src="@/assets/logo.png" alt="Logo" class="logo" />
         </div>
-        <h1 style="margin-left: 20px;">scMoAnno: A Pre-trained Cell Type Annotation Method for Single-cell Multi-omics Data</h1>
+        <h1 style="margin-left: 20px; color: #ffffff;">scMoAnno: A Pre-trained Cell Type Annotation Method for Single-cell Multi-omics Data</h1>
         <div class="scroll-indicator">
           <el-icon><ArrowDownBold /></el-icon>
         </div>
@@ -30,7 +30,7 @@
               overall performance. Furthermore, the increase in clustering scores, fused with multi-omics data and
               extracted by scMoAnno, is elucidated from the perspective of promoting downstream analysis of single
               cells, explaining how our model’s enhancement of cell type annotation performance yields positive effects.
-              <hr>
+              <br><br>
               The workflow diagram of the single-cell multi-omics cell type annotation algorithm, scMoAnno. The scMoAnno
               model
               undergoes two rounds of supervised learning. In the first round, a pre-trained fusion feature extractor is

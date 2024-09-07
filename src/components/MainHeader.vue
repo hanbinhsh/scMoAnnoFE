@@ -1,5 +1,5 @@
 <template>
-    <el-menu :default-active="activeIndex" class="el-menu" mode="horizontal" :ellipsis="false" @select="handleSelect"
+    <el-menu :default-active="activeIndex" class="el-menu main-header" mode="horizontal" :ellipsis="false" @select="handleSelect"
         router="true" :active-class="activeClass">
         <el-menu-item index="HomeView" :class="{ 'is-active': activeIndex === 'HomeView' }">
             <img style="width: 50px" src="../assets/logo.png" alt="logo" />
@@ -10,7 +10,7 @@
         <el-menu-item index="2" :class="{ 'is-active': activeIndex === '2' }">
             Register
         </el-menu-item>
-        <el-menu-item index="WorkSpace" :class="{ 'is-active': activeIndex === 'WorkSpace' }">
+        <el-menu-item index="WorkSpace" :class="{ 'is-active': activeIndex === 'WorkSpace' }" id="WorkSpase">
             WorkSpace
         </el-menu-item>
         <el-menu-item index="ManageUser" :class="{ 'is-active': activeIndex === 'ManageUser' }">
@@ -31,6 +31,11 @@
     position: fixed;
     z-index: 1000;
     width: 100%;
+    border-bottom: 0px;
+}
+
+.main-header{
+    background-image: linear-gradient(0deg, rgba(255,255,255,0), #ffffff);
 }
 </style>
 
