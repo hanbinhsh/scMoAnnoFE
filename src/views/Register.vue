@@ -72,6 +72,8 @@
 <script>
 import { ref } from 'vue';
 import { reactive } from 'vue';
+import axios from "axios";
+import { useRouter } from 'vue-router';
 
 export default {
     name: 'RegisterForm',
@@ -82,7 +84,7 @@ export default {
             checkPass: '',
             phone: '',
             email: '',
-            isAdmin: false,
+            isAdmin: 0,
             acceptTerms: false
         });
         const activeStep = ref(0);
@@ -152,9 +154,37 @@ export default {
                 callback()
             }
         };
+        const router = useRouter();
         const submitForm = () => {
-        // Form submission logic here
-            console.log(form)
+          const formData  = {
+            userName: form.userName,
+            psw: form.password,
+            email: form.email,
+            isAdmin: form.isAdmin,
+            phone: form.phone
+          };
+          try {
+            // 使用 axios.post 方法发送 POST 请求
+            axios.post("/api/register", formData)
+              .then(response => {
+                if (response.data.code === 1) {
+                  // 如果返回码是1，表示成功
+                  activeStep.value++
+                  alert("Registration is successful");
+                  setTimeout(() => {
+                    router.push({ name: 'Login' });
+                  }, 2000);
+                } else {
+                  console.error("Registration failed:", response.data.msg);
+                }
+              })
+              .catch(error => {
+                console.error("Registration failed:", error);
+              });
+          } catch (error) {
+            console.error("Registration failed:", error);
+          }
+            
         };
         return {
             form,
