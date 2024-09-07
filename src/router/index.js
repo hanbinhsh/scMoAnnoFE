@@ -12,9 +12,9 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/about',
-    name: 'about',
-    component: () => import('../views/AboutView.vue')
+    path: '/manageuser',
+    name: 'manageuser',
+    component: () => import('../views/ManageUser.vue')
   },
   {
     path: '/workspace',
