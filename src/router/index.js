@@ -25,8 +25,6 @@ const routes = [
     component: () => import('../views/Register.vue'),
     meta: { title: '用户注册' }
   },
-    component: () => import('../views/AboutView.vue')
-  },
   {
     path: '/workspace',
     name: 'workspace',
