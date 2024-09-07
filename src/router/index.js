@@ -23,6 +23,12 @@ const routes = [
     name: 'WorkSpace',
     component: () => import('../views/WorkSpace.vue'),
     meta: { title: 'WorkSpace' }
+  },
+  {
+    path: '/Upload',
+    name: 'Upload',
+    component: () => import('../views/UploadPage.vue'),
+    meta: { title: 'Upload' }
   }
 ]
 

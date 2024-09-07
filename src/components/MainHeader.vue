@@ -11,10 +11,13 @@
             Register
         </el-menu-item>
         <el-menu-item index="WorkSpace" :class="{ 'is-active': activeIndex === 'WorkSpace' }">
-            Workspace
+            WorkSpace
         </el-menu-item>
         <el-menu-item index="ManageUser" :class="{ 'is-active': activeIndex === 'ManageUser' }">
             ManageUser
+        </el-menu-item>
+        <el-menu-item index="Upload" :class="{ 'is-active': activeIndex === 'Upload' }">
+            Upload
         </el-menu-item>
     </el-menu>
 </template>
