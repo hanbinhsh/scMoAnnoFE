@@ -100,7 +100,7 @@ export default {
   background-color: #f0f0f0;
   position: relative;
   scroll-snap-align: none;
-  padding: 10px;
+  padding: 30px;
   margin-top: 60px;
 }
 </style>

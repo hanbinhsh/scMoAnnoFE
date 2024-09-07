@@ -7,6 +7,7 @@
         <el-menu-item index="1">Login</el-menu-item>
         <el-menu-item index="2">Register</el-menu-item>
         <el-menu-item index="WorkSpace">Workspace</el-menu-item>
+        <el-menu-item index="ManageUser">ManageUser</el-menu-item>
     </el-menu>
 </template>
 
