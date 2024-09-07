@@ -1,49 +1,63 @@
 <template>
   <div class="main-page">
     <MainHeader></MainHeader>
-    <section class="fullscreen-section">
-      <!-- 左侧上传框 -->
-      <el-upload
-        class="upload"
-        drag
-        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-        multiple
-      >
-        <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-        <div class="el-upload__text">
-          Drop file here or <em>click to upload</em>
-        </div>
-        <template #tip>
-          <div class="el-upload__tip">
-            upload scRNA-seq file
+    <section class="upload-section">
+      <!-- 第一排：三个上传框 -->
+      <div class="upload-row">
+        <el-upload class="upload" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :limit="1" :auto-upload="false">
+          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+          <div class="el-upload__text">
+            Drop file here or <em>click to upload</em>
           </div>
-        </template>
-      </el-upload>
+          <template #tip>
+            <div class="el-upload__tip">
+              upload scRNA-seq file
+            </div>
+          </template>
+        </el-upload>
 
-      <!-- 右侧上传框 -->
-      <el-upload
-        class="upload"
-        drag
-        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-        multiple
-      >
-        <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-        <div class="el-upload__text">
-          Drop file here or <em>click to upload</em>
-        </div>
-        <template #tip>
-          <div class="el-upload__tip">
-            upload scATAC-seq file
+        <el-upload class="upload" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :limit="1" :auto-upload="false">
+          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+          <div class="el-upload__text">
+            Drop file here or <em>click to upload</em>
           </div>
-        </template>
-      </el-upload>
+          <template #tip>
+            <div class="el-upload__tip">
+              upload scATAC-seq file
+            </div>
+          </template>
+        </el-upload>
+
+        <el-upload class="upload" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :limit="1" :auto-upload="false">
+          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+          <div class="el-upload__text">
+            Drop file here or <em>click to upload</em>
+          </div>
+          <template #tip>
+            <div class="el-upload__tip">
+              upload custom file
+            </div>
+          </template>
+        </el-upload>
+      </div>
+
+      <!-- 第二排：显示图片 -->
+      <div class="image-row">
+        <img src="@/assets/model.png" alt="Example" class="example-image" />
+      </div>
+
+      <!-- 第三排：三个按钮 -->
+      <div class="button-row">
+        <el-button type="primary" class="action-button">Example</el-button>
+        <el-button type="warning" class="action-button">Reset</el-button>
+        <el-button type="success" class="action-button">Upload</el-button>
+      </div>
     </section>
   </div>
 </template>
 
 <script>
 import MainHeader from "../components/MainHeader.vue";
-import axios from "axios";
 export default {
   name: "UploadPage",
   components: {
@@ -53,7 +67,6 @@ export default {
     return {};
   },
   methods: {},
-  mounted() {},
 };
 </script>
 
@@ -62,19 +75,59 @@ import { UploadFilled } from "@element-plus/icons-vue";
 </script>
 
 <style scoped>
-.fullscreen-section {
-  display: flex; /* 使用Flexbox布局 */
-  justify-content: space-between; /* 在两边保持间距 */
-  padding: 10px 100px 0px 100px; /* 给内容添加一些内边距 */
-  gap: 20px; /* 设置上传框之间的间距 */
+.upload-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  gap: 20px;
+}
+
+.upload-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  gap: 20px;
+  margin-top: 80px;
 }
 
 .upload {
-  width: 45%; /* 每个上传框宽度设置为45%，以保持左右并排 */
+  flex: 1;
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
   padding: 20px;
   text-align: center;
-  height: 200px;
+
+}
+
+.image-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 700px;
+}
+
+.example-image {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  gap: 20px;
+}
+
+.action-button {
+  flex: 1;
 }
 </style>
