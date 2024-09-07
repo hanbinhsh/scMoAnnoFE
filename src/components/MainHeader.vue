@@ -4,7 +4,7 @@
         <el-menu-item index="HomeView" :class="{ 'is-active': activeIndex === 'HomeView' }">
             <img style="width: 50px" src="../assets/logo.png" alt="logo" />
         </el-menu-item>
-        <el-menu-item index="1" :class="{ 'is-active': activeIndex === '1' }">
+        <el-menu-item index="Login" :class="{ 'is-active': activeIndex === 'Login' }">
             Login
         </el-menu-item>
         <el-menu-item index="2" :class="{ 'is-active': activeIndex === '2' }">

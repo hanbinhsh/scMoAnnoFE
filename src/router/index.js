@@ -31,9 +31,9 @@ const routes = [
     meta: { title: 'Upload' }
   },
   {
-    path: '/login',
-    name: 'login',
-    component: () => import('../views/loginView.vue')
+    path: '/Login',
+    name: 'Login',
+    component: () => import('../views/LoginView.vue')
   },
 ]
 
