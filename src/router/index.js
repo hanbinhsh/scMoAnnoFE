@@ -29,7 +29,12 @@ const routes = [
     name: 'Upload',
     component: () => import('../views/UploadPage.vue'),
     meta: { title: 'Upload' }
-  }
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/loginView.vue')
+  },
 ]
 
 const router = createRouter({
