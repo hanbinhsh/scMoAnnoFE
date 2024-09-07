@@ -7,7 +7,7 @@
         <el-menu-item index="Login" :class="{ 'is-active': activeIndex === 'Login' }">
             Login
         </el-menu-item>
-        <el-menu-item index="2" :class="{ 'is-active': activeIndex === '2' }">
+        <el-menu-item index="Register" :class="{ 'is-active': activeIndex === 'Register' }">
             Register
         </el-menu-item>
         <el-menu-item index="WorkSpace" :class="{ 'is-active': activeIndex === 'WorkSpace' }" id="WorkSpase">
@@ -35,7 +35,7 @@
 }
 
 .main-header{
-    background-image: linear-gradient(0deg, rgba(255,255,255,0), #ffffff);
+    background: linear-gradient(0deg, rgba(255,255,255,0), #ffffff);
 }
 </style>
 
