@@ -1,10 +1,12 @@
 .main-page {
     scroll-snap-type: y mandatory;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 100vh;
+    -ms-overflow-style: none;  /* 适用于 IE 和 Edge 浏览器 */
+    scrollbar-width: none;  /* 适用于 Firefox */
 }
 
-.fullscreen-section {
+.fullscreen-mainpage-section {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,6 +14,16 @@
     background-color: #f0f0f0;
     position: relative;
     scroll-snap-align: start;
+}
+
+.fullscreen-section {
+    display: block;
+    height: 100vh;
+    background-color: #f0f0f0;
+    position: relative;
+    scroll-snap-align: none;
+    padding: 30px;
+    margin-top: 60px;
 }
 
 .logo-container {
@@ -90,4 +102,15 @@
 .intro-image img {
     max-width: 100%;
     height: auto;
+}
+
+.with-background {
+    background-image: url('@/assets/background-image.png');
+    /* 替换为你的背景图片路径 */
+    background-size: cover;
+    /* 背景图片按比例放大或缩小，以完全覆盖容器 */
+    background-position: center;
+    /* 背景图片居中显示 */
+    background-repeat: no-repeat;
+    /* 防止背景图片重复 */
 }

@@ -8,33 +8,44 @@ const routes = [
   },
   {
     path: '/HomeView',
-    name: 'home',
-    component: HomeView
+    name: 'HomeView',
+    component: HomeView,
+    meta: { title: 'HomeView' }
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/ManageUser',
+    name: 'ManageUser',
+    component: () => import('../views/ManageUser.vue'),
+    meta: { title: 'ManageUser' }
   },
   {
-    path: '/register',
-    name: 'register',
-    component: () => import('../views/Register.vue'),
-    meta: { title: '用户注册' }
+    path: '/WorkSpace',
+    name: 'WorkSpace',
+    component: () => import('../views/WorkSpace.vue'),
+    meta: { title: 'WorkSpace' }
   },
   {
-    path: '/workspace',
-    name: 'workspace',
-    component: () => import('../views/WorkSpace.vue')
-  }
+    path: '/Upload',
+    name: 'Upload',
+    component: () => import('../views/UploadPage.vue'),
+    meta: { title: 'Upload' }
+  },
+  {
+    path: '/Login',
+    name: 'Login',
+    component: () => import('../views/LoginView.vue'),
+    meta: { title: 'Login' }
+  },
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  window.document.title = to.meta.title  // 更新标题
+  next();
 })
 
 export default router

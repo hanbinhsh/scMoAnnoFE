@@ -1,28 +1,67 @@
 <template>
-    <el-menu :default-active="activeIndex" class="el-menu" mode="horizontal" :ellipsis="false"
-        @select="handleSelect" router="true">
-        <el-menu-item index="HomeView">
+    <el-menu :default-active="activeIndex" class="el-menu main-header" mode="horizontal" :ellipsis="false" @select="handleSelect"
+        router="true" :active-class="activeClass">
+        <el-menu-item index="HomeView" :class="{ 'is-active': activeIndex === 'HomeView' }">
             <img style="width: 50px" src="../assets/logo.png" alt="logo" />
         </el-menu-item>
-        <el-menu-item index="Login">Login</el-menu-item>
-        <el-menu-item index="Register">Register</el-menu-item>
-        <el-menu-item index="WorkSpace">Workspace</el-menu-item>
+        <el-menu-item index="Login" :class="{ 'is-active': activeIndex === 'Login' }">
+            Login
+        </el-menu-item>
+        <el-menu-item index="2" :class="{ 'is-active': activeIndex === '2' }">
+            Register
+        </el-menu-item>
+        <el-menu-item index="WorkSpace" :class="{ 'is-active': activeIndex === 'WorkSpace' }" id="WorkSpase">
+            WorkSpace
+        </el-menu-item>
+        <el-menu-item index="ManageUser" :class="{ 'is-active': activeIndex === 'ManageUser' }">
+            ManageUser
+        </el-menu-item>
+        <el-menu-item index="Upload" :class="{ 'is-active': activeIndex === 'Upload' }">
+            Upload
+        </el-menu-item>
     </el-menu>
 </template>
 
-<style>
+<style scoped>
 .el-menu--horizontal>.el-menu-item:nth-child(1) {
     margin-right: auto;
 }
-.el-menu{
+
+.el-menu {
     position: fixed;
     z-index: 1000;
     width: 100%;
+    border-bottom: 0px;
+}
+
+.main-header{
+    background-image: linear-gradient(0deg, rgba(255,255,255,0), #ffffff);
 }
 </style>
 
 <script>
 export default {
-    name: 'MainHeader'
-}
+    name: "MainHeader",
+    data() {
+        return {
+            activeIndex: "", // 当前激活的菜单项
+        };
+    },
+    methods: {
+        handleSelect(index) {
+            this.activeIndex = index; // 选择菜单项时更新当前激活项
+        },
+    },
+    watch: {
+        // 监听路由变化，更新激活菜单项
+        $route(to) {
+            this.activeIndex = to.name;
+        },
+    },
+    mounted() {
+        // 初始化时设置激活项
+        this.activeIndex = this.$route.name;
+        console.log(this.$route.name)
+    },
+};
 </script>
