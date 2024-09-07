@@ -42,6 +42,12 @@ const routes = [
     component: () => import('../views/Register.vue'),
     meta: { title: 'Register' }
   },
+  {
+    path: '/Example',
+    name: 'Example',
+    component: () => import('../views/Example.vue'),
+    meta: { title: 'Example' }
+  },
 ]
 
 const router = createRouter({

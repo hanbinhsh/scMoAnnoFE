@@ -19,6 +19,9 @@
         <el-menu-item index="Upload" :class="{ 'is-active': activeIndex === 'Upload' }">
             Upload
         </el-menu-item>
+        <el-menu-item index="Example" :class="{ 'is-active': activeIndex === 'Example' }">
+            Example
+        </el-menu-item>
     </el-menu>
 </template>
 
@@ -59,9 +62,7 @@ export default {
         },
     },
     mounted() {
-        // 初始化时设置激活项
         this.activeIndex = this.$route.name;
-        console.log(this.$route.name)
     },
 };
 </script>
