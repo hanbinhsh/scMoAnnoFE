@@ -35,7 +35,7 @@
 }
 
 .main-header{
-    background-image: linear-gradient(0deg, rgba(255,255,255,0), #ffffff);
+    background: linear-gradient(0deg, rgba(255,255,255,0), #ffffff);
 }
 </style>
 
