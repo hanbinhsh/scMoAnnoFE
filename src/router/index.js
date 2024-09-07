@@ -8,18 +8,27 @@ const routes = [
   },
   {
     path: '/HomeView',
-    name: 'home',
-    component: HomeView
+    name: 'HomeView',
+    component: HomeView,
+    meta: { title: 'HomeView' }
   },
   {
-    path: '/about',
-    name: 'about',
-    component: () => import('../views/AboutView.vue')
+    path: '/ManageUser',
+    name: 'ManageUser',
+    component: () => import('../views/ManageUser.vue'),
+    meta: { title: 'ManageUser' }
   },
   {
-    path: '/workspace',
-    name: 'workspace',
-    component: () => import('../views/WorkSpace.vue')
+    path: '/WorkSpace',
+    name: 'WorkSpace',
+    component: () => import('../views/WorkSpace.vue'),
+    meta: { title: 'WorkSpace' }
+  },
+  {
+    path: '/Upload',
+    name: 'Upload',
+    component: () => import('../views/UploadPage.vue'),
+    meta: { title: 'Upload' }
   },
   {
     path: '/login',
@@ -31,6 +40,11 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  window.document.title = to.meta.title  // 更新标题
+  next();
 })
 
 export default router

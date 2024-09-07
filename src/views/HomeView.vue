@@ -2,7 +2,7 @@
   <div class="main-page">
     <MainHeader></MainHeader>
     <div>
-      <section class="fullscreen-section">
+      <section class="fullscreen-mainpage-section">
         <div class="logo-container">
           <img src="@/assets/logo.png" alt="Logo" class="logo" />
         </div>
@@ -40,10 +40,6 @@
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>
 
 <script>
 import MainHeader from "../components/MainHeader.vue"
