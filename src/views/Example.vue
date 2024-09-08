@@ -5,29 +5,17 @@
       <div class="chart-container">
         <div id="main" class="chart"></div>
         <div class="table-container">
-          <el-table
-            :data="tableData"
-            border
-            :page-size="pageSize"
-            :current-page="currentPage"
-            @current-change="handlePageChange"
-          >
-            <el-table-column prop="index" label="序号" width="80"></el-table-column>
-            <el-table-column prop="coord" label="坐标" width="180">
+          <el-table :data="paginatedData" stripe style="width: 100%;">
+            <el-table-column prop="index" label="ID" width="70" sortable></el-table-column>
+            <el-table-column prop="coord" label="Position" sortable>
               <template #default="{ row }">
                 {{ `(${row.coord[0]}, ${row.coord[1]})` }}
               </template>
             </el-table-column>
-            <el-table-column prop="label" label="标签" width="120"></el-table-column>
+            <el-table-column prop="label" label="Label" sortable></el-table-column>
           </el-table>
-          <el-pagination
-            background
-            layout="prev, pager, next"
-            :total="totalItems"
-            :page-size="pageSize"
-            :current-page="currentPage"
-            @current-change="handlePageChange"
-          ></el-pagination>
+          <el-pagination background layout="prev, pager, next" :total="totalItems" :page-size="pageSize"
+            :current-page="currentPage" @current-change="handlePageChange" class="page-control"></el-pagination>
         </div>
       </div>
     </section>
@@ -58,7 +46,7 @@ export default {
         coord,
         label: labels[index] || 'N/A',
       })),
-      pageSize: 10,
+      pageSize: 18,
       currentPage: 1,
     };
   },
@@ -88,7 +76,11 @@ export default {
   display: flex;
   align-items: flex-start;
   padding: 20px;
-  background-color: #f5f5f5; /* 背景色 */
+  background-color: #f5f5f5;
+  height: 100%;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
 }
 
 .chart-container {
@@ -106,6 +98,9 @@ export default {
 .table-container {
   margin-left: 20px;
   flex: 1;
+  width: 800px;
+  height: 800px;
+  position: relative;
 }
 
 .el-table {
@@ -117,5 +112,13 @@ export default {
 .el-pagination {
   margin-top: 10px;
   text-align: right;
+}
+
+.page-control{
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 </style>

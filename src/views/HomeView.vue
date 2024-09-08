@@ -26,7 +26,7 @@
           </el-icon>
         </div>
       </section>
-      <div class="intro-section">
+      <section class="intro-section">
         <div class="intro-container">
           <div class="intro-text">
             <p> Cell type annotation is paramount for subsequent biomedical research endeavors. Recently, supervised
@@ -61,7 +61,7 @@
             <img src="@/assets/model.png" alt="介绍图片" />
           </div>
         </div>
-      </div>
+      </section>
       <section class="intro-section">
         <div class="intro-container">
           <div class="intro-text">
@@ -96,22 +96,17 @@ export default {
 <style scoped>
 .rotating-image {
   position: absolute;
-  /* 绝对定位 */
   transform: translate(-50%, -50%);
-  /* 图片在父容器中居中 */
   animation: rotate 25s linear infinite;
-  /* 设置旋转动画 */
 }
 
 @keyframes rotate {
   from {
     transform: translate(-50%, -50%) rotate(0deg);
-    /* 初始角度 */
   }
 
   to {
     transform: translate(-50%, -50%) rotate(360deg);
-    /* 结束角度 */
   }
 }
 
