@@ -12,7 +12,7 @@
         </h4>
       </div>
       <div class="login-page-body">
-        <el-form :model="loginForm" ref="loginForm">
+        <el-form :model="loginForm" >
           <el-form-item prop="username"
             :rules="[{ required: true, message: 'Please input username', trigger: 'blur' }]">
             <el-input v-model="loginForm.username" placeholder="Username" class="input-field"></el-input>
@@ -24,8 +24,9 @@
           </el-form-item>
         </el-form>
         <el-divider></el-divider>
-        <el-button type="primary" class="submit-button" @click="submitForm('loginForm')">Sign in to
+        <el-button type="primary" class="submit-button" @click="onShow">Sign in to
           scMoAnno</el-button>
+        <Vcode :show="isShow" @success="onSuccess" @close="onClose" />
         <div class="backHome">
           <a href="/HomeView">Home</a>
         </div>
@@ -34,34 +35,42 @@
   </div>
 </template>
 
-<script>
-import axios from "axios";
-import { useRouter } from 'vue-router';
-const router = useRouter();
-export default {
-  name: "LoginView",
-  data() {
-    return {
-      loginForm: {
-        username: "",
-        password: "",
-      },
-    };
-  },
-  methods: {
-    async submitForm() {
-      const response = await axios.post('/api/login', { userName: this.loginForm.username, password: this.loginForm.password });
+<script setup>
+  import axios from 'axios';
+  import { ref } from "vue";
+  import Vcode from "vue3-puzzle-vcode";
+  import { ElMessage } from 'element-plus';
+  const loginForm = ref({  
+    username: '',  
+    password: ''  
+  });  
+
+
+  const submitForm = async() => {
+      const response = await axios.post('/api/login', { userName: loginForm.value.username, password: loginForm.value.password });
       if(response.data.code == 200) {
         sessionStorage.setItem('userData', JSON.stringify(response.data.data));
+        ElMessage.error('login success.');
         window.location.href = '/HomeView';
       }       
       else
-        this.$alert('<strong>' + response.data.msg + '</strong>', "login failed", {
-          dangerouslyUseHTMLString: true
-        });
-    },
-  },
-};
+        ElMessage.error('the username or password is not correct.');
+  };
+
+  const isShow = ref(false);
+
+  const onShow = () => {
+    isShow.value = true;
+  };
+
+  const onClose = () => {
+    isShow.value = false;
+    submitForm();
+  };
+
+  const onSuccess = () => {
+    onClose();
+  };
 </script>
 
 <style scoped>
