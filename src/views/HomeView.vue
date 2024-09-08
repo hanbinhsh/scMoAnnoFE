@@ -2,16 +2,31 @@
   <div class="main-page">
     <MainHeader></MainHeader>
     <div>
-      <section class="fullscreen-mainpage-section with-background">
-        <div class="logo-container">
+      <section class="fullscreen-mainpage-section with-background" style="position: relative;">
+        <div>
+          <img src="@/assets/background/1.png" alt="旋转的图片" class="rotating-image"
+            style="z-index: 5; top: 30%; left: 80%;" />
+          <img src="@/assets/background/2.png" alt="旋转的图片" class="rotating-image"
+            style="z-index: 4; top: 30%; left: 80%;" />
+          <img src="@/assets/background/3.png" alt="旋转的图片" class="rotating-image"
+            style="z-index: 1; top: 80%; left: 30%;" />
+          <img src="@/assets/background/4.png" alt="旋转的图片" class="rotating-image"
+            style="z-index: 3; top: 15%; left: 10%;" />
+          <img src="@/assets/background/5.png" alt="旋转的图片" class="rotating-image"
+            style="z-index: 2; top: 15%; left: 10%;" />
+        </div>
+        <div class="logo-container" style="z-index: 999;">
           <img src="@/assets/logo.png" alt="Logo" class="logo" />
         </div>
-        <h1 style="margin-left: 20px; color: #ffffff;">scMoAnno: A Pre-trained Cell Type Annotation Method for Single-cell Multi-omics Data</h1>
-        <div class="scroll-indicator">
-          <el-icon><ArrowDownBold /></el-icon>
+        <h1 style="margin-left: 20px; color: #ffffff; z-index: 999;">scMoAnno: A Pre-trained Cell Type Annotation Method
+          for Single-cell Multi-omics Data</h1>
+        <div class="scroll-indicator" style="z-index: 999;">
+          <el-icon>
+            <ArrowDownBold />
+          </el-icon>
         </div>
       </section>
-      <section class="intro-section">
+      <div class="intro-section">
         <div class="intro-container">
           <div class="intro-text">
             <p> Cell type annotation is paramount for subsequent biomedical research endeavors. Recently, supervised
@@ -46,7 +61,7 @@
             <img src="@/assets/model.png" alt="介绍图片" />
           </div>
         </div>
-      </section>
+      </div>
       <section class="intro-section">
         <div class="intro-container">
           <div class="intro-text">
@@ -74,6 +89,35 @@ export default {
   name: 'HomeView',
   components: {
     MainHeader
-  }
+  },
 }
 </script>
+
+<style scoped>
+.rotating-image {
+  position: absolute;
+  /* 绝对定位 */
+  transform: translate(-50%, -50%);
+  /* 图片在父容器中居中 */
+  animation: rotate 25s linear infinite;
+  /* 设置旋转动画 */
+}
+
+@keyframes rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+    /* 初始角度 */
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+    /* 结束角度 */
+  }
+}
+
+.intro-section{
+  z-index: 999; 
+  background-color: #ffffff; 
+  position: relative;
+}
+</style>

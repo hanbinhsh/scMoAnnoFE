@@ -105,8 +105,6 @@
 }
 
 .with-background {
-    background-image: url('@/assets/background-image.png');
-    /* 替换为你的背景图片路径 */
     background-size: cover;
     /* 背景图片按比例放大或缩小，以完全覆盖容器 */
     background-position: center;
