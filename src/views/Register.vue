@@ -176,6 +176,7 @@ export default {
                   }, 2000);
                 } else {
                   console.error("Registration failed:", response.data.msg);
+                  alert(response.data.msg);
                 }
               })
               .catch(error => {
