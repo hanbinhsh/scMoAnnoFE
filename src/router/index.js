@@ -11,7 +11,7 @@ const routes = [
     path: '/HomeView',
     name: 'HomeView',
     component: HomeView,
-    meta: { title: 'HomeView' }
+    meta: { title: 'scMoAnno' }
   },
   {
     path: '/ManageUser',

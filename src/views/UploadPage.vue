@@ -37,7 +37,7 @@
           </div>
           <template #tip>
             <div class="el-upload__tip">
-              upload custom file
+              upload Tag file
             </div>
           </template>
         </el-upload>
