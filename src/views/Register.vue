@@ -20,7 +20,7 @@
               <el-step title="Agreement"></el-step>
               <el-step title="Submit"></el-step>
             </el-steps>
-            <el-form :model="form" label-width="80px">
+            <el-form ref="Form" :model="form" label-width="80px">
               <div v-if="activeStep === 0">
                 <el-form-item label="UserName" prop="userName" :rules="[{validator: userName, trigger: 'blur'}]">
                   <el-input v-model="form.userName"></el-input>
@@ -33,7 +33,7 @@
                 </el-form-item>
               </div>
               <div v-if="activeStep === 1">
-                <el-form-item label="Phone" prop="phone" :rules="[{validator: phone, trigger: 'blur' }]">
+                <el-form-item label="Phone" prop="phone" :rules="[{validator: phone, trigger: 'blur' },]" >
                   <el-input v-model="form.phone"></el-input>
                 </el-form-item>
                 <el-form-item label="Email" prop="email" :rules="[{validator: email, trigger: 'blur' }]">
@@ -61,8 +61,8 @@
       <el-row class="text-center loginscreen animated fadeInDown" style="max-width: 500px;margin: 0 auto;">
         <el-col :span="24">
           <p class="text-muted text-center"><small>Already have an account?</small></p>
-          <el-button type="text" href="login">login</el-button>
-          <el-button type="text" href="/">Return to Home</el-button>
+          <el-button type="text" @click="goToLogin">login</el-button>
+          <el-button type="text" @click="goToHome">Return to Home</el-button>
         </el-col>
       </el-row>
     </div>
@@ -88,6 +88,12 @@ export default {
             acceptTerms: false
         });
         const activeStep = ref(0);
+        const goToHome = () =>{
+          router.push({ name: 'Login' });
+        };
+        const goToLogin = () =>{
+          router.push({ name: 'HomeView' });
+        };
         const next = () => {
             if(activeStep.value===0){
                 if (form.userName && form.password && form.confirm) {
@@ -95,12 +101,21 @@ export default {
                         activeStep.value++;
                     }
                 } else {
-                    console.log('Error submit!!');
+                    alert('Please fill in the information!');
                     return false;
                 }
             } else if (activeStep.value === 1) {
                 if (form.phone && form.email) {
+                  const reg = /^[1][3-9][0-9]{9}$/;
+                  const emailRegExp = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+                  const emailRegExp1 = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+                  if (!reg.test(form.phone) || !emailRegExp.test(form.email) || !emailRegExp1.test(form.email)) {
+                    console.log('Error submit!!');
+                    return false;
+                  } else {
                     activeStep.value++;
+                  }
+                  // activeStep.value++;
                 } else {
                     console.log('Error submit!!');
                     return false;
@@ -109,6 +124,7 @@ export default {
                 if (form.acceptTerms) {
                     activeStep.value++;
                 } else {
+                    alert("Please accept the terms and policiesc!");
                     console.log('Error submit!!');
                     return false;
                 }
@@ -143,14 +159,27 @@ export default {
         const phone = (rule, value, callback) => {
             if (value === '') {
                 callback(new Error('Please enter a phone number'))
-            } else {
+            } else if(value){
+                const reg = /^[1][3-9][0-9]{9}$/;
+                if (!reg.test(value)){
+                  callback(new Error('Please input correct phone number'))
+                }
+            }
+            else {
                 callback()
             }
         };
         const email = (rule, value, callback) => {
             if (value === '') {
                 callback(new Error('Please enter your email'))
-            } else {
+            } else if(value){
+                const emailRegExp = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+                const emailRegExp1 = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+                if (!emailRegExp.test(value) || !emailRegExp1.test(value)){
+                  callback(new Error('Please input correct email address'))
+                }
+            }
+              else {
                 callback()
             }
         };
@@ -198,6 +227,9 @@ export default {
             validatePass2,
             phone,
             email,
+            goToHome,
+            goToLogin,
+
         };
     }
 }
