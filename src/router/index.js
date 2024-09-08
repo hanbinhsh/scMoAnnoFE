@@ -50,6 +50,12 @@ const routes = [
     meta: { title: 'Example' }
   },
   {
+    path: '/Profile',
+    name: 'Profile',
+    component: () => import('../views/Profile.vue'),
+    meta: { title: 'Profile' }
+  },
+  {
     path: '/Feedback',
     name: 'Feedback',
     component: () => import('../views/FeedbackView.vue'),

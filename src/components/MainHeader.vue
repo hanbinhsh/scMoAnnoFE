@@ -12,7 +12,7 @@
         </el-menu-item>
         <el-sub-menu v-if="userData.userName">
             <template #title>{{ userData.userName }}</template>
-            <el-menu-item>Profile</el-menu-item>
+            <el-menu-item index="Profile" :class="{ 'is-active': activeIndex === 'Profile' }" id="Profile">Profile</el-menu-item>
             <el-menu-item @click="logout()">Log out</el-menu-item>
         </el-sub-menu>
         <el-menu-item index="WorkSpace" :class="{ 'is-active': activeIndex === 'WorkSpace' }" id="WorkSpase"
