@@ -10,7 +10,7 @@
         <el-menu-item index="Register" :class="{ 'is-active': activeIndex === 'Register' }" v-if="!userData.userName">
             Register
         </el-menu-item>
-        <el-sub-menu v-if="userData.userName">
+        <el-sub-menu v-if="userData.userName" index="">
             <template #title>{{ userData.userName }}</template>
             <el-menu-item index="Profile" :class="{ 'is-active': activeIndex === 'Profile' }" id="Profile">Profile</el-menu-item>
             <el-menu-item @click="logout()">Log out</el-menu-item>

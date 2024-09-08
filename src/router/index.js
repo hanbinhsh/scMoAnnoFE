@@ -53,7 +53,7 @@ const routes = [
     path: '/Profile',
     name: 'Profile',
     component: () => import('../views/Profile.vue'),
-    meta: { title: 'Profile' }
+    meta: { title: 'Profile', requiresLogin:true }
   },
   {
     path: '/Feedback',
