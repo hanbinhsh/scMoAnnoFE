@@ -25,7 +25,7 @@
             <el-button link type="primary" size="small" @click="showDetailDialog(row)">
               Detail
             </el-button>
-            <el-button link type="primary" size="small" @click="showDeleteDialog(row)">
+            <el-button link type="danger" size="small" @click="showDeleteDialog(row)">
               Delete
             </el-button>
           </template>
@@ -38,7 +38,7 @@
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="deleteDialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="deleteDialogVisible = false; deleteTask()">
+        <el-button type="danger" @click="deleteDialogVisible = false; deleteTask()">
           Confirm
         </el-button>
       </div>
