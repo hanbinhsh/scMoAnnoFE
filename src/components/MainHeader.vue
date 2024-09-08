@@ -28,6 +28,9 @@
         <el-menu-item index="Example" :class="{ 'is-active': activeIndex === 'Example' }">
             Example
         </el-menu-item>
+        <el-menu-item index="Feedback" :class="{ 'is-active': activeIndex === 'Feedback' }" v-if="userData.userName">
+            Feedback
+        </el-menu-item>
     </el-menu>
 </template>
 

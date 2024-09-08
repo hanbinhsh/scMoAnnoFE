@@ -49,6 +49,12 @@ const routes = [
     component: () => import('../views/Example.vue'),
     meta: { title: 'Example' }
   },
+  {
+    path: '/Feedback',
+    name: 'Feedback',
+    component: () => import('../views/FeedbackView.vue'),
+    meta: { title: 'Feedback' }
+  },
 ]
 
 const router = createRouter({
