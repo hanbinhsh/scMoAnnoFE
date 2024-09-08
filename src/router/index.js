@@ -1,5 +1,6 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { ElMessage } from 'element-plus'
 
 const routes = [
   {
@@ -16,19 +17,19 @@ const routes = [
     path: '/ManageUser',
     name: 'ManageUser',
     component: () => import('../views/ManageUser.vue'),
-    meta: { title: 'ManageUser' }
+    meta: { title: 'ManageUser', requiresAuth:true, requiresLogin:true }
   },
   {
     path: '/WorkSpace',
     name: 'WorkSpace',
     component: () => import('../views/WorkSpace.vue'),
-    meta: { title: 'WorkSpace' }
+    meta: { title: 'WorkSpace', requiresLogin:true }
   },
   {
     path: '/Upload',
     name: 'Upload',
     component: () => import('../views/UploadPage.vue'),
-    meta: { title: 'Upload' }
+    meta: { title: 'Upload', requiresLogin:true }
   },
   {
     path: '/Login',
@@ -51,7 +52,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 
@@ -60,4 +61,39 @@ router.beforeEach((to, from, next) => {
   next();
 })
 
+router.beforeEach((to, from, next) => {
+  window.document.title = to.meta.title  // 更新标题
+  // 登录检测
+  if (to.matched.some(record => record.meta.requiresLogin)) {
+    // 获取 sessionStorage 中的用户数据
+    const user = sessionStorage.getItem('userData');
+    if (!user) {
+      // 如果没有用户数据，重定向到登录页面
+      ElMessage.error('You are not logged in.')
+      next({
+        path: '/Login',
+        query: { redirect: to.fullPath },
+      });
+    } else {
+      // 如果有用户数据
+      if (to.matched.some(record => record.meta.requiresAuth)) {
+        //需要用户权限
+        if (!user.isAdmin) {
+          ElMessage.error('This page requires authorization.')
+          next({
+            path: '/HomeView',
+            query: { redirect: to.fullPath },
+          });
+        }
+      }
+      // 允许访问
+      next();
+    }
+  } else {
+    // 不需要认证的路由，允许访问
+    next();
+  }
+})
+
 export default router
+
