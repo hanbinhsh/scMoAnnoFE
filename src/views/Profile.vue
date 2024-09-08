@@ -2,31 +2,13 @@
     <div class="main-page">
       <MainHeader></MainHeader>
       <section class="fullscreen-section">
-      <el-descriptions class="margin-top" title="User Information" :column="3" :size="size" border>
+        <el-descriptions title="User Information" direction="vertical" :column="4" border>
       <template #extra>
         <el-button type="primary" size="small">Operatiion</el-button> <!-- 操作按钮 -->
       </template>
-      <el-descriptions-item>
-        <template #label>
-            <i class="el-icon-user" ></i>
-            User Name
-        </template>
-        {{ userData.userName }}
-      </el-descriptions-item>
-      <el-descriptions-item>
-      <template #label>
-        <i class="el-icon-mail"></i>
-        Email
-      </template>
-      {{ userData.email }}
-      </el-descriptions-item>
-      <el-descriptions-item>
-      <template #label>
-        <i class="el-icon-mobile-phone"></i>
-        Phone
-      </template>
-      {{ userData.phone }}
-      </el-descriptions-item>
+      <el-descriptions-item label="User Name">{{ userData.userName }}</el-descriptions-item>
+      <el-descriptions-item label="Email" :span="2">{{ userData.email }}</el-descriptions-item>
+      <el-descriptions-item label="Phone">{{ userData.phone }}</el-descriptions-item>
       </el-descriptions>
     </section>
     </div>
