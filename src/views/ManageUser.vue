@@ -142,6 +142,7 @@ export default {
     // 获取用户数据
     async fetchUserList() {
       try {
+        const response = await axios.get("/api/findUsers");
         if (response.data.code === 200) {
           this.userList = response.data.data;
         } else {
