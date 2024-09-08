@@ -1,6 +1,6 @@
 <template>
     <el-menu :default-active="activeIndex" class="el-menu main-header" mode="horizontal" :ellipsis="false"
-        @select="handleSelect" router="true" :active-class="activeClass">
+        @select="handleSelect" :router="true">
         <el-menu-item index="HomeView" :class="{ 'is-active': activeIndex === 'HomeView' }">
             <img style="width: 50px" src="../assets/logo.png" alt="logo" />
         </el-menu-item>

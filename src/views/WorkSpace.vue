@@ -4,7 +4,6 @@
     <section class="fullscreen-section">
       <!-- 任务列表表格 -->
       <el-table :data="taskList" style="width: 100%">
-        <el-table-column prop="taskId" label="Task ID" sortable></el-table-column>
         <el-table-column prop="taskName" label="Task Name" sortable></el-table-column>
         <el-table-column prop="startTime" label="Request Time" sortable>
           <template #default="{ row }">
@@ -21,15 +20,46 @@
             <el-tag :type="statusType(row.status)">{{ statusText(row.status) }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="details" label="Details"></el-table-column>
+        <el-table-column fixed="right" label="Operations">
+          <template #default="{ row }">
+            <el-button link type="primary" size="small" @click="showDetailDialog(row)">
+              Detail
+            </el-button>
+            <el-button link type="primary" size="small" @click="showDeleteDialog(row)">
+              Delete
+            </el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </section>
   </div>
+  <el-dialog v-model="deleteDialogVisible" title="Warning" width="500" align-center>
+    <span>Task <strong style="color: #e74c3c;">{{ selectedTask.taskName }}</strong> will be deleted</span>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="deleteDialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="deleteDialogVisible = false; deleteTask()">
+          Confirm
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
+  <el-dialog v-model="detailDialogVisible" title="Detail" width="500" align-center>
+    <span>{{ selectedTask.details }}</span>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button type="primary" @click="detailDialogVisible = false">
+          Confirm
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
 import MainHeader from "../components/MainHeader.vue";
 import axios from "axios";
+import { ElMessage } from 'element-plus';
 
 export default {
   name: "WorkSpace",
@@ -39,9 +69,31 @@ export default {
   data() {
     return {
       taskList: [], // 用于存储任务数据
+      deleteDialogVisible: false,
+      detailDialogVisible:false,
+      selectedTask: null,
     };
   },
   methods: {
+    showDeleteDialog(task) {
+      this.deleteDialogVisible = true
+      this.selectedTask = task
+    },
+    showDetailDialog(task) {
+      this.detailDialogVisible = true
+      this.selectedTask = task
+    },
+    async deleteTask() {
+      try {
+        const response = await axios.get("/api/deleteTaskByID?taskID=" + this.selectedTask.taskId); // 这里假设有一个 API 路径 `/api/tasks` 返回任务数据
+        // 如果返回码是200，表示成功，获取data部分
+        this.taskList = response.data.data;
+        ElMessage.success('Delete success.');
+        this.fetchTaskList();
+      } catch (error) {
+        console.error("Delete failed:", error);
+      }
+    },
     // 获取任务数据
     async fetchTaskList() {
       try {

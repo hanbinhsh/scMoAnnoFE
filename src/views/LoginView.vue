@@ -50,11 +50,11 @@
       const response = await axios.post('/api/login', { userName: loginForm.value.username, password: loginForm.value.password });
       if(response.data.code == 200) {
         sessionStorage.setItem('userData', JSON.stringify(response.data.data));
-        ElMessage.error('login success.');
+        ElMessage.success('Login success.');
         window.location.href = '/HomeView';
       }       
       else
-        ElMessage.error('the username or password is not correct.');
+        ElMessage.error('The username or password is incorrect.');
   };
 
   const isShow = ref(false);
