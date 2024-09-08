@@ -11,7 +11,7 @@ const routes = [
     path: '/HomeView',
     name: 'HomeView',
     component: HomeView,
-    meta: { title: 'HomeView' }
+    meta: { title: 'scMoAnno' }
   },
   {
     path: '/ManageUser',
@@ -66,8 +66,8 @@ router.beforeEach((to, from, next) => {
   // 登录检测
   if (to.matched.some(record => record.meta.requiresLogin)) {
     // 获取 sessionStorage 中的用户数据
-    const user = sessionStorage.getItem('userData');
-    if (!user) {
+    const user = JSON.parse(sessionStorage.getItem('userData')) || {}
+    if (!user.userName) {
       // 如果没有用户数据，重定向到登录页面
       ElMessage.error('You are not logged in.')
       next({
@@ -78,6 +78,7 @@ router.beforeEach((to, from, next) => {
       // 如果有用户数据
       if (to.matched.some(record => record.meta.requiresAuth)) {
         //需要用户权限
+        console.log(user)
         if (!user.isAdmin) {
           ElMessage.error('This page requires authorization.')
           next({
