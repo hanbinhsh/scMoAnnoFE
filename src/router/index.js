@@ -89,8 +89,6 @@ router.beforeEach((to, from, next) => {
     } else {
       // 如果有用户数据
       if (to.matched.some(record => record.meta.requiresAuth)) {
-        //需要用户权限
-        console.log(user)
         if (!user.isAdmin) {
           ElMessage.error('This page requires authorization.')
           next({
