@@ -55,6 +55,12 @@ const routes = [
     component: () => import('../views/Profile.vue'),
     meta: { title: 'Profile' }
   },
+  {
+    path: '/Feedback',
+    name: 'Feedback',
+    component: () => import('../views/FeedbackView.vue'),
+    meta: { title: 'Feedback' }
+  },
 ]
 
 const router = createRouter({
