@@ -38,8 +38,6 @@ export default {
   data() {
     return {
       feedbackForm: {
-        name: '',
-        email: '',
         subject: '',
         message: ''
       }
