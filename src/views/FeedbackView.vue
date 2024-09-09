@@ -9,7 +9,7 @@
               <span>Feedback</span>
             </div>
             <div class="card-body">
-              <p class="feedback-text">You can submit your feedback below, and we will get your message</p>
+              <p class="feedback-text">You can submit your feedback below, and we will get your message.</p>
               <el-form ref="feedbackForm" :model="feedbackForm" label-width="120px" class="feedback-form">
                 <el-form-item label="Subject">
                   <el-input v-model="feedbackForm.subject" placeholder="Subject" class="input-field"></el-input>
@@ -31,22 +31,45 @@
 
 <script>
 import MainHeader from "../components/MainHeader.vue"
+import axios from "axios";
 export default {
   components: {
     MainHeader
   },
   data() {
     return {
+      userData: JSON.parse(sessionStorage.getItem('userData')) || {},//存用户信息
       feedbackForm: {
+        userId: '',
         subject: '',
-        message: ''
-      }
+        message: '',
+        createTime: ''
+      },
     };
   },
   methods: {
-    submitForm() {
+    async submitForm() {
       // 这里可以添加发送表单数据的逻辑
       console.log('Feedback submitted:', this.feedbackForm);
+      console.log(this.userData)
+      this.feedbackForm.userId = this.userData.userId;
+      try{
+        await axios.post("/api/feedback", this.feedbackForm)
+          .then(response => {
+            if (response.data.code === 1){
+              alert("The feedback is successful");
+
+            } else{
+              console.error("Feedback failed:", response.data.msg);
+              alert(response.data.msg);
+            }
+          })
+          .catch(error => {
+            console.error("Feedback failed:", error);
+          });
+      } catch(error) {
+        console.error("Feedback failed:", error);
+      }
       // 重置表单
       this.$refs.feedbackForm.resetFields();
     }
