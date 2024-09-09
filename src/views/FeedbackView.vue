@@ -11,10 +11,10 @@
             <div class="card-body">
               <p class="feedback-text">You can submit your feedback below, and we will get your message.</p>
               <el-form ref="feedbackForm" :model="feedbackForm" label-width="120px" class="feedback-form">
-                <el-form-item label="Subject">
+                <el-form-item label="Subject" prop="subject">
                   <el-input v-model="feedbackForm.subject" placeholder="Subject" class="input-field"></el-input>
                 </el-form-item>
-                <el-form-item label="Message">
+                <el-form-item label="Message" prop="message">
                   <el-input type="textarea" :rows="8" v-model="feedbackForm.message" placeholder="Your Message" class="textarea-field"></el-input>
                 </el-form-item>
                 <el-form-item>
