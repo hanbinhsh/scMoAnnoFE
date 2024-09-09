@@ -15,7 +15,7 @@
                   <el-input v-model="feedbackForm.subject" placeholder="Subject" class="input-field"></el-input>
                 </el-form-item>
                 <el-form-item label="Message">
-                  <el-input type="textarea" :rows="4" v-model="feedbackForm.message" placeholder="Your Message" class="textarea-field"></el-input>
+                  <el-input type="textarea" :rows="8" v-model="feedbackForm.message" placeholder="Your Message" class="textarea-field"></el-input>
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" @click="submitForm" class="submit-button">Send Message</el-button>
