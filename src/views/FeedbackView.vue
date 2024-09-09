@@ -24,15 +24,8 @@
               <span>Feedback</span>
             </div>
             <div class="card-body">
-              <p class="feedback-text">You can submit your feedback below, and we will send your message to:</p>
-              <p class="contact-info">John Doe, john.doe@example.com or Jane Smith, jane.smith@example.com</p>
+              <p class="feedback-text">You can submit your feedback below, and we will get your message</p>
               <el-form ref="feedbackForm" :model="feedbackForm" label-width="120px" class="feedback-form">
-                <el-form-item label="Name">
-                  <el-input v-model="feedbackForm.name" placeholder="Your Name" class="input-field"></el-input>
-                </el-form-item>
-                <el-form-item label="E-Mail">
-                  <el-input v-model="feedbackForm.email" placeholder="Your Email" class="input-field"></el-input>
-                </el-form-item>
                 <el-form-item label="Subject">
                   <el-input v-model="feedbackForm.subject" placeholder="Subject" class="input-field"></el-input>
                 </el-form-item>
