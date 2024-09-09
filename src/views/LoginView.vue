@@ -12,7 +12,7 @@
         </h4>
       </div>
       <div class="login-page-body">
-        <el-form :model="loginForm" >
+        <el-form :model="loginForm">
           <el-form-item prop="username"
             :rules="[{ required: true, message: 'Please input username', trigger: 'blur' }]">
             <el-input v-model="loginForm.username" placeholder="Username" class="input-field"></el-input>
@@ -20,13 +20,14 @@
           <el-form-item prop="password"
             :rules="[{ required: true, message: 'Please input password', trigger: 'blur' }]">
             <el-input v-model="loginForm.password" type="password" placeholder="Password"
-              class="input-field"></el-input>
+              class="input-field" show-password></el-input>
           </el-form-item>
         </el-form>
         <el-divider></el-divider>
         <el-button type="primary" class="submit-button" @click="onShow">Sign in to
           scMoAnno</el-button>
-        <Vcode :show="isShow" @success="onSuccess" @close="onClose" />
+        <Vcode :show="isShow" @success="onSuccess" @close="onClose" slider-text="Slide to complete the puzzle"
+          success-text="Verification successful!" />
         <div class="backHome">
           <a href="/HomeView">Home</a>
         </div>
@@ -36,41 +37,41 @@
 </template>
 
 <script setup>
-  import axios from 'axios';
-  import { ref } from "vue";
-  import Vcode from "vue3-puzzle-vcode";
-  import { ElMessage } from 'element-plus';
-  const loginForm = ref({  
-    username: '',  
-    password: ''  
-  });  
+import axios from 'axios';
+import { ref } from "vue";
+import Vcode from "vue3-puzzle-vcode";
+import { ElMessage } from 'element-plus';
+const loginForm = ref({
+  username: '',
+  password: ''
+});
 
 
-  const submitForm = async() => {
-      const response = await axios.post('/api/login', { userName: loginForm.value.username, password: loginForm.value.password });
-      if(response.data.code == 200) {
-        sessionStorage.setItem('userData', JSON.stringify(response.data.data));
-        ElMessage.success('Login success.');
-        window.location.href = '/HomeView';
-      }       
-      else
-        ElMessage.error('The username or password is incorrect.');
-  };
+const submitForm = async () => {
+  const response = await axios.post('/api/login', { userName: loginForm.value.username, password: loginForm.value.password });
+  if (response.data.code == 200) {
+    sessionStorage.setItem('userData', JSON.stringify(response.data.data));
+    ElMessage.success('Login success.');
+    window.location.href = '/HomeView';
+  }
+  else
+    ElMessage.error('The username or password is incorrect.');
+};
 
-  const isShow = ref(false);
+const isShow = ref(false);
 
-  const onShow = () => {
-    isShow.value = true;
-  };
+const onShow = () => {
+  isShow.value = true;
+};
 
-  const onClose = () => {
-    isShow.value = false;
-    submitForm();
-  };
+const onClose = () => {
+  isShow.value = false;
+  submitForm();
+};
 
-  const onSuccess = () => {
-    onClose();
-  };
+const onSuccess = () => {
+  onClose();
+};
 </script>
 
 <style scoped>

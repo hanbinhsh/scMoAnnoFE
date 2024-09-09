@@ -1,22 +1,7 @@
 <template>
-  <el-container class="container">
-    <el-header class="header">
-      <!-- 导航栏内容 -->
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1">Home</el-menu-item>
-        <el-menu-item index="2">Products</el-menu-item>
-        <el-menu-item index="3">Services</el-menu-item>
-        <el-menu-item index="4">Contact Us</el-menu-item>
-        <el-menu-item index="5" style="float: right;">
-          <el-button type="text" class="nav-button">Login</el-button>
-        </el-menu-item>
-        <el-menu-item index="6" style="float: right;">
-          <el-button type="text" class="nav-button">Register</el-button>
-        </el-menu-item>
-      </el-menu>
-    </el-header>
-
-    <el-main class="main-content">
+  <el-container class="main-page">
+    <MainHeader></MainHeader>
+    <el-main class="fullscreen-section">
       <el-row type="flex" justify="center">
         <el-col :span="12">
           <el-card class="feedback-card">
@@ -45,7 +30,11 @@
 </template>
 
 <script>
+import MainHeader from "../components/MainHeader.vue"
 export default {
+  components: {
+    MainHeader
+  },
   data() {
     return {
       feedbackForm: {
@@ -68,23 +57,9 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  font-family: 'Arial', sans-serif;
-}
-
-.header {
-  background-color: #409eff;
-  color: white;
-  padding: 0 50px;
-}
-
 .nav-button {
   color: white;
   font-weight: bold;
-}
-
-.main-content {
-  padding: 50px;
 }
 
 .feedback-card {

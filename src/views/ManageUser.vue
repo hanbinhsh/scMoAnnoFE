@@ -1,63 +1,182 @@
 <template>
-    <div class="main-page">
-      <MainHeader></MainHeader>
-      <section class="fullscreen-section">
-        <!-- 任务列表表格 -->
-        <el-table :data="userList" style="width: 100%">
-          <el-table-column prop="userName" label="User Name" sortable></el-table-column>
-          <el-table-column prop="email" label="Email" sortable></el-table-column>
-          <el-table-column prop="phone" label="Phone" sortable></el-table-column>
-          <el-table-column prop="isAdmin" label="Admin" sortable></el-table-column>
-        </el-table>
-      </section>
-    </div>
-  </template>
-  
-  <script>
-  import MainHeader from "../components/MainHeader.vue";
-  import axios from "axios";
-  
-  export default {
-    name: "WorkSpace",
-    components: {
-      MainHeader,
+  <div class="main-page">
+    <MainHeader></MainHeader>
+    <section class="fullscreen-section">
+      <!-- 用户列表表格 -->
+      <el-table :data="userList" style="width: 100%">
+        <el-table-column prop="userName" label="User Name" sortable></el-table-column>
+        <el-table-column prop="email" label="Email" sortable></el-table-column>
+        <el-table-column prop="phone" label="Phone" sortable></el-table-column>
+        <el-table-column prop="isAdmin" label="Admin" sortable></el-table-column>
+
+        <!-- 操作列 -->
+        <el-table-column fixed="right" label="Operations" width="150">
+          <template #default="{ row }">
+            <el-button link type="primary" size="small" @click="showEditDialog(row)">Edit</el-button>
+            <!-- 禁用删除按钮 -->
+            <el-button v-if="row.userId === this.userData.userId" link type="default" size="small" disabled>
+              Delete
+            </el-button>
+            <!-- 可点击的删除按钮 -->
+            <el-button v-else link type="danger" size="small" @click="showDeleteDialog(row)">
+              Delete
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </section>
+
+    <!-- 删除确认对话框 -->
+    <el-dialog v-model="deleteDialogVisible" title="Warning" width="500">
+      <span>User <strong style="color: #e74c3c;">{{ selectedUser.userName }}</strong> will be deleted</span>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="deleteDialogVisible = false">Cancel</el-button>
+          <el-button type="danger" @click="confirmDelete">Confirm</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+    <!-- 编辑对话框 -->
+    <el-dialog v-model="editDialogVisible" title="Edit User" width="500">
+      <el-form :model="selectedUser" label-width="100px" label-position="left">
+        <el-form-item label="User Name" class="form-item">
+          <el-input v-model="selectedUser.userName" class="form-input"></el-input>
+        </el-form-item>
+        <el-form-item label="Password" class="form-item">
+          <el-input
+            v-model="selectedUser.psw"
+            type="password"
+            show-password
+            placeholder="Enter new password"
+            class="form-input"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="Email" class="form-item">
+          <el-input v-model="selectedUser.email" class="form-input"></el-input>
+        </el-form-item>
+        <el-form-item label="Phone" class="form-item">
+          <el-input v-model="selectedUser.phone" class="form-input"></el-input>
+        </el-form-item>
+        <el-form-item label="Admin" class="form-item">
+          <el-switch
+            v-model="selectedUser.isAdmin"
+            :active-value="1"
+            :inactive-value="0"
+            :disabled="selectedUser.userId === this.userData.userId"
+          ></el-switch>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="editDialogVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="confirmEdit">Save</el-button>
+        </div>
+      </template>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import MainHeader from "../components/MainHeader.vue";
+import axios from "axios";
+import { ElMessage } from 'element-plus';
+
+export default {
+  name: "WorkSpace",
+  components: {
+    MainHeader,
+  },
+  data() {
+    return {
+      userList: [], // 用于存储用户数据
+      deleteDialogVisible: false,
+      editDialogVisible: false,
+      selectedUser: null,
+      userData: JSON.parse(sessionStorage.getItem('userData')) || {},
+    };
+  },
+  methods: {
+    // 显示删除对话框
+    showDeleteDialog(user) {
+      if (user.userId === this.userData.userId) {
+        ElMessage.warning('You cannot delete your own account.');
+        return;
+      }
+      this.deleteDialogVisible = true;
+      this.selectedUser = user;
     },
-    data() {
-      return {
-        userList: [], // 用于存储任务数据
-      };
+    // 显示编辑对话框
+    showEditDialog(user) {
+      this.editDialogVisible = true;
+      this.selectedUser = { ...user, psw: '' }; // 创建用户数据的副本，且密码初始为空
     },
-    methods: {
-      // 获取任务数据
-      async fetchUserList() {
-        try {
-          const response = await axios.get("/api/findUsers"); // 这里假设有一个 API 路径 `/api/tasks` 返回任务数据
-          if (response.data.code === 200) {
-            // 如果返回码是200，表示成功，获取data部分
-            this.userList = response.data.data;
-          } else {
-            console.error("Failed to fetch task list:", response.data.msg);
-          }
-        } catch (error) {
-          console.error("Failed to fetch task list:", error);
+    // 确认删除操作
+    async confirmDelete() {
+      try {
+        await axios.get(`/api/deleteUserByUserID?userID=${this.selectedUser.userId}`);
+        this.fetchUserList();
+        ElMessage.success('User deleted successfully.');
+      } catch (error) {
+        ElMessage.error('Failed to delete user.');
+        console.error("Delete failed:", error);
+      } finally {
+        this.deleteDialogVisible = false;
+      }
+    },
+    // 确认编辑操作
+    async confirmEdit() {
+      try {
+        // 将布尔值转换为整数值
+        this.selectedUser.isAdmin = this.selectedUser.isAdmin ? 1 : 0;
+        await axios.post(`/api/updateUser`, this.selectedUser);
+        this.fetchUserList();
+        ElMessage.success('User updated successfully.');
+      } catch (error) {
+        ElMessage.error('Failed to update user.');
+        console.error("Edit failed:", error);
+      } finally {
+        this.editDialogVisible = false;
+      }
+    },
+    // 获取用户数据
+    async fetchUserList() {
+      try {
+        const response = await axios.get("/api/findUsers");
+        if (response.data.code === 200) {
+          this.userList = response.data.data;
+        } else {
+          console.error("Failed to fetch user list:", response.data.msg);
         }
-      },
+      } catch (error) {
+        console.error("Failed to fetch user list:", error);
+      }
     },
-    mounted() {
-      this.fetchUserList(); // 组件挂载后获取任务数据
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .fullscreen-section {
-    display: block;
-    height: 100vh;
-    background-color: #f0f0f0;
-    position: relative;
-    scroll-snap-align: none;
-    padding: 30px;
-    margin-top: 60px;
-  }
-  </style>
-  
+  },
+  mounted() {
+    this.fetchUserList();
+  },
+};
+</script>
+
+<style scoped>
+.fullscreen-section {
+  display: block;
+  height: 100vh;
+  background-color: #f0f0f0;
+  position: relative;
+  scroll-snap-align: none;
+  padding: 30px;
+  margin-top: 60px;
+}
+
+/* 确保输入框的长度保持一致 */
+.form-item {
+  display: flex;
+  align-items: center;
+}
+
+.form-input {
+  width: 100%;
+}
+</style>
