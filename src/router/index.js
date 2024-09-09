@@ -61,6 +61,12 @@ const routes = [
     component: () => import('../views/FeedbackView.vue'),
     meta: { title: 'Feedback' }
   },
+  {
+    path: '/ManageTasks',
+    name: 'ManageTasks',
+    component: () => import('../views/ManageTasks.vue'),
+    meta: { title: 'ManageTasks', requiresAuth:true, requiresLogin:true }
+  },
 ]
 
 const router = createRouter({

@@ -68,6 +68,7 @@ export default {
   },
   data() {
     return {
+      userData: JSON.parse(sessionStorage.getItem('userData')) || {},
       taskList: [], // 用于存储任务数据
       deleteDialogVisible: false,
       detailDialogVisible:false,
@@ -97,7 +98,7 @@ export default {
     // 获取任务数据
     async fetchTaskList() {
       try {
-        const response = await axios.get("/api/findTasksByUserID?userID=" + "1"); // 这里假设有一个 API 路径 `/api/tasks` 返回任务数据
+        const response = await axios.get("/api/findTasksByUserID?userID=" + this.userData.userId);
         if (response.data.code === 200) {
           // 如果返回码是200，表示成功，获取data部分
           this.taskList = response.data.data;

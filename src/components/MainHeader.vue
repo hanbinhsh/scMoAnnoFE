@@ -15,12 +15,15 @@
             <el-menu-item index="Profile" :class="{ 'is-active': activeIndex === 'Profile' }" id="Profile">Profile</el-menu-item>
             <el-menu-item @click="logout()">Log out</el-menu-item>
         </el-sub-menu>
+        <el-menu-item index="ManageUser" :class="{ 'is-active': activeIndex === 'ManageUser' }" v-if="userData?.isAdmin">
+            <strong>ManageUser</strong>
+        </el-menu-item>
+        <el-menu-item index="ManageTasks" :class="{ 'is-active': activeIndex === 'ManageTasks' }" v-if="userData?.isAdmin">
+            <strong>ManageTasks</strong>
+        </el-menu-item>
         <el-menu-item index="WorkSpace" :class="{ 'is-active': activeIndex === 'WorkSpace' }" id="WorkSpase"
             v-if="userData.userName">
             WorkSpace
-        </el-menu-item>
-        <el-menu-item index="ManageUser" :class="{ 'is-active': activeIndex === 'ManageUser' }" v-if="userData?.isAdmin">
-            ManageUser
         </el-menu-item>
         <el-menu-item index="Upload" :class="{ 'is-active': activeIndex === 'Upload' }" v-if="userData.userName">
             Upload
