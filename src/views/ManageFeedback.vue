@@ -26,7 +26,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="deleteDialogVisible = false">Cancel</el-button>
-          <el-button type="danger" @click="deleteDialogVisible = false; deleteFeedback(selectedFeedback.feedbackId)">
+          <el-button type="danger" @click="deleteDialogVisible = false; deleteFeedback(selectedFeedback.feedback_id)">
             Confirm
           </el-button>
         </div>
@@ -56,11 +56,12 @@ export default {
     showDeleteDialog(feedback) {
       this.deleteDialogVisible = true;
       this.selectedFeedback = feedback;
+      // console.log(this.selectedFeedback)
     },
     async fetchFeedbacks() {
       try {
         const response = await axios.get('/api/findAllFeedbackWithUserInformation');
-        console.log(response)
+        // console.log(response)
         if (response.data.code === 200) {
           const dataObject = response.data.data;
           this.feedbackList = Object.values(dataObject);
@@ -74,6 +75,7 @@ export default {
       }
     },
     async deleteFeedback(feedbackId) {
+      // console.log(feedbackId)
       try {
         const response = await axios.delete(`/api/deleteFeedback/${feedbackId}`);
         if (response.data.code === 1) {
