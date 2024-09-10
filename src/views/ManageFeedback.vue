@@ -7,7 +7,6 @@
         <el-table-column prop="email" label="User Email" sortable></el-table-column>
         <el-table-column prop="phone" label="User Phone" sortable></el-table-column>
         <el-table-column prop="subject" label="Subject" sortable></el-table-column>
-        <el-table-column prop="message" label="Message" sortable></el-table-column>
         <el-table-column prop="created_time" label="Create Time" width="180">
           <template #default="{ row }">
             {{ formatDate(row.created_time) }}
@@ -15,6 +14,9 @@
         </el-table-column>
         <el-table-column fixed="right" label="Operations" width="180">
           <template #default="{ row }">
+            <el-button link type="primary" size="small" @click="showMessageDialog(row)">
+              Message
+            </el-button>
             <el-button link type="danger" size="small" @click="showDeleteDialog(row)">Delete</el-button>
           </template>
         </el-table-column>
@@ -32,6 +34,16 @@
         </div>
       </template>
     </el-dialog>
+
+    <!-- 详情对话框 -->
+    <el-dialog v-model="messageDialogVisible" title="Message" width="500" align-center>
+      <span>{{ selectedFeedback.message }}</span>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="messageDialogVisible = false">Confirm</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -39,6 +51,7 @@
 import MainHeader from "../components/MainHeader.vue"
 import { ref } from 'vue';
 import axios from 'axios';
+import { ElMessage } from 'element-plus';
 
 export default {
   name: 'FeedbackPage',
@@ -49,6 +62,7 @@ export default {
     return {
       feedbackList: [],
       deleteDialogVisible: false,
+      messageDialogVisible: false,
       selectedFeedback: [],
     };
   },
@@ -56,12 +70,18 @@ export default {
     showDeleteDialog(feedback) {
       this.deleteDialogVisible = true;
       this.selectedFeedback = feedback;
-      // console.log(this.selectedFeedback)
+    },
+    showMessageDialog(feedback) {
+      this.messageDialogVisible = true;
+      this.selectedFeedback = feedback;
+    },
+    showMessageDialog(feedback) {
+      this.messageDialogVisible = true;
+      this.selectedFeedback = feedback;
     },
     async fetchFeedbacks() {
       try {
         const response = await axios.get('/api/findAllFeedbackWithUserInformation');
-        // console.log(response)
         if (response.data.code === 200) {
           const dataObject = response.data.data;
           this.feedbackList = Object.values(dataObject);
@@ -80,11 +100,11 @@ export default {
         const response = await axios.delete(`/api/deleteFeedback/${feedbackId}`);
         if (response.data.code === 1) {
           // 从列表中移除被删除的反馈
-          alert('Feedback deleted successfully');
+          ElMessage.success('Feedback deleted successfully');
           this.fetchFeedbacks();
         } else {
           console.error('Failed to delete feedback:', response.data.msg);
-          alert(response.data.msg);
+          ElMessage.error(response.data.msg);
         }
       } catch (error) {
         console.error('Failed to delete feedback:', error);

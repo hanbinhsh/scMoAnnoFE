@@ -31,7 +31,7 @@
         </el-menu-item>
         <el-menu-item index="ManageFeedback" :class="{ 'is-active': activeIndex === 'ManageFeedback' }"
             v-if="userData.userName && userData.isAdmin">
-            <strong>ManageTasks</strong>
+            <strong>ManageFeedback</strong>
         </el-menu-item>
         <el-menu-item index="WorkSpace" :class="{ 'is-active': activeIndex === 'WorkSpace' }" id="WorkSpase"
             v-if="userData.userName">
