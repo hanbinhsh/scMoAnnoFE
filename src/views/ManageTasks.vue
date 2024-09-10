@@ -44,7 +44,7 @@
         <!-- 用户头像列 -->
         <el-table-column label="Avatar" width="80">
           <template #default="{ row }">
-            <el-avatar :size="50" :src="row.avatarBase64 ? 'data:image/jpeg;base64,' + row.avatarBase64 : ''"></el-avatar>
+            <el-avatar :size="24" :src="row.avatarBase64 ? 'data:image/jpeg;base64,' + row.avatarBase64 : ''"></el-avatar>
           </template>
         </el-table-column>
         <!-- 显示上传者的用户名 -->
