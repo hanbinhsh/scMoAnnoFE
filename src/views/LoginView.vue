@@ -66,11 +66,11 @@ const onShow = () => {
 
 const onClose = () => {
   isShow.value = false;
-  submitForm();
 };
 
 const onSuccess = () => {
   onClose();
+  submitForm();
 };
 </script>
 
