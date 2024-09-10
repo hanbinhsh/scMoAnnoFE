@@ -55,8 +55,8 @@
                 Feedback
             </el-menu-item>
             <div class="dark-mode-toggle">
-                <el-switch v-model="isDarkMode" :active-icon="Sunny" :inactive-icon="Moon" inline-prompt
-                    width="15"></el-switch>
+                <el-switch id="dark" v-model="isDarkMode" :active-icon="Sunny" :inactive-icon="Moon" inline-prompt
+                    width="15" @click="toggleTheme($event)"></el-switch>
             </div>
         </el-menu>
         <!-- 黑暗模式开关按钮，放在菜单的外部 -->
@@ -65,6 +65,51 @@
 
 <script setup>
 import { Sunny, Moon } from '@element-plus/icons-vue'
+import { useDark, useToggle } from '@vueuse/core'
+import { ref } from 'vue'; 
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
+const isDarkTag = ref(false);
+const toggleTheme = (event) => {
+  const x = event.clientX;
+  const y = event.clientY;
+  const endRadius = Math.hypot(
+      Math.max(x, innerWidth - x),
+      Math.max(y, innerHeight - y)
+  );
+
+  // 兼容性处理
+  if (!document.startViewTransition) {
+    toggleDark()
+    return
+  }
+  const transition = document.startViewTransition(() => {
+    const root = document.documentElement;
+    isDarkTag.value = root.classList.contains('dark');
+    isDark.value = !isDarkTag.value;
+    root.classList.remove(isDarkTag.value ? 'dark' : 'light');
+    root.classList.add(isDarkTag.value ? 'light' : 'dark');
+  })
+
+  transition.ready.then(() => {
+    const clipPath = [
+      `circle(0px at ${x}px ${y}px)`,
+      `circle(${endRadius}px at ${x}px ${y}px)`,
+    ];
+    document.documentElement.animate(
+        {
+          clipPath: isDarkTag.value ? [...clipPath].reverse() : clipPath,
+        },
+        {
+          duration: 300,
+          easing: 'ease-in',
+          pseudoElement: isDarkTag.value
+              ? '::view-transition-old(root)'
+              : '::view-transition-new(root)',
+        }
+    );
+  });
+}
 </script>
 
 <script>
@@ -98,18 +143,12 @@ export default {
             // 将黑暗模式状态保存到本地存储
             localStorage.setItem('isDarkMode', newVal);
             document.body.classList.toggle('dark-mode', newVal); // 切换 body 的黑暗模式类
-            if (newVal) {
-                document.documentElement.setAttribute('class', 'dark');
-            } else {
-                document.documentElement.removeAttribute('class');
-            }
         },
     },
     mounted() {
         this.activeIndex = this.$route.name;
         this.isDarkMode = JSON.parse(localStorage.getItem('isDarkMode')) || false;
         if (this.isDarkMode) {
-            document.documentElement.setAttribute('class', 'dark');
             document.body.classList.toggle('dark-mode', this.isDarkMode);
         }
     },
@@ -138,5 +177,24 @@ export default {
 
 .dark-mode .main-header {
     background: linear-gradient(0deg, rgba(255, 255, 255, 0), #2c2c2c);
+}
+
+.dark::view-transition-old(root) {
+    z-index: 1;
+}
+.dark::view-transition-new(root) {
+    z-index: 1999;
+}
+
+::view-transition-old(root) {
+    z-index: 1999;
+}
+::view-transition-new(root) {
+    z-index: 1;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
 }
 </style>
