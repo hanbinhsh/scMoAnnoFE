@@ -267,15 +267,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.fullscreen-section {
-  display: block;
-  height: 89vh;
-  background-color: #f0f0f0;
-  position: relative;
-  scroll-snap-align: none;
-  padding: 30px;
-  margin-top: 60px;
-}
-</style>

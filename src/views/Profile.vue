@@ -20,7 +20,7 @@
       <el-card class="user-card" shadow="hover" style="z-index: 100;">
         <div class="user-header">
           <!-- 显示头像 -->
-          <el-avatar :src="userData.avatarBase64 ? 'data:image/jpeg;base64,' + userData.avatarBase64 : ''"
+          <el-avatar :src="userData.avatarBase64 ? 'data:image/jpeg;base64,' + userData.avatarBase64 : defaultAvatar"
             size="large"></el-avatar>
           <div class="user-info">
             <h2>{{ userData.userName }}</h2>
@@ -67,6 +67,7 @@
 import MainHeader from "../components/MainHeader.vue";
 import axios from "axios";
 import { ElMessage } from 'element-plus';
+import logo from '../assets/logo.png';
 
 export default {
   name: "Profile",
@@ -78,6 +79,7 @@ export default {
       editDialogVisible: false,
       User: null,
       avatarFile: null,
+      defaultAvatar: logo,
       avatarPreview: '', // 用于头像预览的 Base64 字符串
       userData: JSON.parse(sessionStorage.getItem('userData')) || {},
     };

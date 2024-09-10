@@ -11,7 +11,10 @@
             Register
         </el-menu-item>
         <el-sub-menu v-if="userData.userName" index="">
-            <template #title>{{ userData.userName }}</template>
+            <template #title>
+                <el-avatar :src="userData.avatarBase64 ? 'data:image/jpeg;base64,' + userData.avatarBase64 : defaultAvatar" size="small"></el-avatar>&nbsp;
+                {{ userData.userName }}
+            </template>
             <el-menu-item index="Profile" :class="{ 'is-active': activeIndex === 'Profile' }" id="Profile">Profile</el-menu-item>
             <el-menu-item @click="logout()">Log out</el-menu-item>
         </el-sub-menu>
@@ -55,11 +58,14 @@
 </style>
 
 <script>
+import logo from '../assets/logo.png';
+
 export default {
     name: "MainHeader",
     data() {
         return {
             activeIndex: "", // 当前激活的菜单项
+            defaultAvatar: logo,
             userData: JSON.parse(sessionStorage.getItem('userData')) || {},
         };
     },
