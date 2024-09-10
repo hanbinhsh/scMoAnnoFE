@@ -1,53 +1,71 @@
 <template>
-    <el-menu :default-active="activeIndex" class="el-menu main-header" mode="horizontal" :ellipsis="false"
-        @select="handleSelect" :router="true">
-        <el-menu-item index="HomeView" :class="{ 'is-active': activeIndex === 'HomeView' }">
-            <img style="width: 50px" src="../assets/logo.png" alt="logo" />
-        </el-menu-item>
-        <el-menu-item index="Login" :class="{ 'is-active': activeIndex === 'Login' }" v-if="!userData.userName">
-            Login
-        </el-menu-item>
-        <el-menu-item index="Register" :class="{ 'is-active': activeIndex === 'Register' }" v-if="!userData.userName">
-            Register
-        </el-menu-item>
-        <el-sub-menu v-if="userData.userName" index="">
-            <template #title>
-                <el-avatar
-                    :src="userData.avatarBase64 ? 'data:image/jpeg;base64,' + userData.avatarBase64 : defaultAvatar"
-                    size="small"></el-avatar>&nbsp;
-                {{ userData.userName }}
-            </template>
-            <el-menu-item index="Profile" :class="{ 'is-active': activeIndex === 'Profile' }"
-                id="Profile">Profile</el-menu-item>
-            <el-menu-item @click="logout()">Log out</el-menu-item>
-        </el-sub-menu>
-        <el-menu-item index="ManageUser" :class="{ 'is-active': activeIndex === 'ManageUser' }"
-            v-if="userData?.isAdmin">
-            <strong>ManageUser</strong>
-        </el-menu-item>
-        <el-menu-item index="ManageTasks" :class="{ 'is-active': activeIndex === 'ManageTasks' }"
-            v-if="userData?.isAdmin">
-            <strong>ManageTasks</strong>
-        </el-menu-item>
-        <el-menu-item index="ManageFeedback" :class="{ 'is-active': activeIndex === 'ManageFeedback' }"
-            v-if="userData.userName && userData.isAdmin">
-            <strong>ManageFeedback</strong>
-        </el-menu-item>
-        <el-menu-item index="WorkSpace" :class="{ 'is-active': activeIndex === 'WorkSpace' }" id="WorkSpase"
-            v-if="userData.userName">
-            WorkSpace
-        </el-menu-item>
-        <el-menu-item index="Upload" :class="{ 'is-active': activeIndex === 'Upload' }" v-if="userData.userName">
-            Upload
-        </el-menu-item>
-        <el-menu-item index="Example" :class="{ 'is-active': activeIndex === 'Example' }">
-            Example
-        </el-menu-item>
-        <el-menu-item index="Feedback" :class="{ 'is-active': activeIndex === 'Feedback' }" v-if="userData.userName">
-            Feedback
-        </el-menu-item>
-    </el-menu>
+    <div class="header-container">
+        <el-menu :default-active="activeIndex" class="el-menu main-header" mode="horizontal" :ellipsis="false"
+            @select="handleSelect" :router="true">
+            <el-menu-item index="HomeView" :class="{ 'is-active': activeIndex === 'HomeView' }">
+                <img style="width: 50px" src="../assets/logo.png" alt="logo" />
+            </el-menu-item>
+            <el-menu-item index="Login" :class="{ 'is-active': activeIndex === 'Login' }" v-if="!userData.userName">
+                Login
+            </el-menu-item>
+            <el-menu-item index="Register" :class="{ 'is-active': activeIndex === 'Register' }"
+                v-if="!userData.userName">
+                Register
+            </el-menu-item>
+            <el-sub-menu v-if="userData.userName" index="1">
+                <template #title>
+                    <el-avatar
+                        :src="userData.avatarBase64 ? 'data:image/jpeg;base64,' + userData.avatarBase64 : defaultAvatar"
+                        size="small"></el-avatar>&nbsp;
+                    {{ userData.userName }}
+                </template>
+                <el-menu-item index="Profile" :class="{ 'is-active': activeIndex === 'Profile' }"
+                    id="Profile">Profile</el-menu-item>
+                <el-menu-item @click="logout()">Log out</el-menu-item>
+            </el-sub-menu>
+            <el-sub-menu v-if="userData.userName && userData?.isAdmin" index="2">
+                <template #title>
+                    Manage
+                </template>
+                <el-menu-item index="ManageUser" :class="{ 'is-active': activeIndex === 'ManageUser' }"
+                    v-if="userData?.isAdmin">
+                    ManageUser
+                </el-menu-item>
+                <el-menu-item index="ManageTasks" :class="{ 'is-active': activeIndex === 'ManageTasks' }"
+                    v-if="userData?.isAdmin">
+                    ManageTasks
+                </el-menu-item>
+                <el-menu-item index="ManageFeedback" :class="{ 'is-active': activeIndex === 'ManageFeedback' }"
+                    v-if="userData.userName && userData.isAdmin">
+                    ManageFeedback
+                </el-menu-item>
+            </el-sub-menu>
+            <el-menu-item index="WorkSpace" :class="{ 'is-active': activeIndex === 'WorkSpace' }" id="WorkSpase"
+                v-if="userData.userName">
+                WorkSpace
+            </el-menu-item>
+            <el-menu-item index="Upload" :class="{ 'is-active': activeIndex === 'Upload' }" v-if="userData.userName">
+                Upload
+            </el-menu-item>
+            <el-menu-item index="Example" :class="{ 'is-active': activeIndex === 'Example' }">
+                Example
+            </el-menu-item>
+            <el-menu-item index="Feedback" :class="{ 'is-active': activeIndex === 'Feedback' }"
+                v-if="userData.userName">
+                Feedback
+            </el-menu-item>
+            <div class="dark-mode-toggle">
+                <el-switch v-model="isDarkMode" :active-icon="Sunny" :inactive-icon="Moon" inline-prompt
+                    width="15"></el-switch>
+            </div>
+        </el-menu>
+        <!-- 黑暗模式开关按钮，放在菜单的外部 -->
+    </div>
 </template>
+
+<script setup>
+import { Sunny, Moon } from '@element-plus/icons-vue'
+</script>
 
 <script>
 import logo from '../assets/logo.png';
@@ -59,6 +77,7 @@ export default {
             activeIndex: "", // 当前激活的菜单项
             defaultAvatar: logo,
             userData: JSON.parse(sessionStorage.getItem('userData')) || {},
+            isDarkMode: false, // 黑暗模式开关
         };
     },
     methods: {
@@ -68,16 +87,31 @@ export default {
         logout() {
             window.sessionStorage.clear();
             this.$router.push('/Login');
-        }
+        },
     },
     watch: {
         // 监听路由变化，更新激活菜单项
         $route(to) {
             this.activeIndex = to.name;
         },
+        isDarkMode(newVal) {
+            // 将黑暗模式状态保存到本地存储
+            localStorage.setItem('isDarkMode', newVal);
+            document.body.classList.toggle('dark-mode', newVal); // 切换 body 的黑暗模式类
+            if (newVal) {
+                document.documentElement.setAttribute('class', 'dark');
+            } else {
+                document.documentElement.removeAttribute('class');
+            }
+        },
     },
     mounted() {
         this.activeIndex = this.$route.name;
+        this.isDarkMode = JSON.parse(localStorage.getItem('isDarkMode')) || false;
+        if (this.isDarkMode) {
+            document.documentElement.setAttribute('class', 'dark');
+            document.body.classList.toggle('dark-mode', this.isDarkMode);
+        }
     },
 };
 </script>
@@ -96,5 +130,13 @@ export default {
 
 .main-header {
     background: linear-gradient(0deg, rgba(255, 255, 255, 0), #ffffff);
+}
+
+.dark-mode-toggle {
+    margin: 13px;
+}
+
+.dark-mode .main-header {
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0), #2c2c2c);
 }
 </style>
