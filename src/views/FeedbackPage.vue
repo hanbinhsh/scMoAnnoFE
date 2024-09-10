@@ -16,7 +16,7 @@
             </el-table-column>
             <el-table-column fixed="right" label="Operations" width="180">
                 <template #default="{ row }">
-                    <el-button type="danger" size="small" @click="showDeleteDialog(row)">Delete</el-button>
+                    <el-button link type="danger" size="small" @click="showDeleteDialog(row)">Delete</el-button>
                 </template>
             </el-table-column>
         </el-table>
