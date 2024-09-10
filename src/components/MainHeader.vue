@@ -31,7 +31,10 @@
         <el-menu-item index="Example" :class="{ 'is-active': activeIndex === 'Example' }">
             Example
         </el-menu-item>
-        <el-menu-item index="Feedback" :class="{ 'is-active': activeIndex === 'Feedback' }" v-if="userData.userName">
+        <el-menu-item index="Feedback" :class="{ 'is-active': activeIndex === 'Feedback' }" v-if="userData.userName && !userData.isAdmin">
+            Feedback
+        </el-menu-item>
+        <el-menu-item index="FeedbackPage" :class="{ 'is-active': activeIndex === 'FeedbackPage' }" v-if="userData.userName && userData.isAdmin">
             Feedback
         </el-menu-item>
     </el-menu>
