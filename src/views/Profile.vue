@@ -2,7 +2,8 @@
     <div class="main-page">
       <MainHeader></MainHeader>
       <section class="fullscreen-section">
-        <el-descriptions title="User Information" direction="vertical" :column="5" border>
+        
+        <el-descriptions title="User Information" direction="" size="mini" :column="1" border>
       <el-descriptions-item label="User Name">{{ userData.userName }}</el-descriptions-item>
       <el-descriptions-item label="Email" :span="2">{{ userData.email }}</el-descriptions-item>
       <el-descriptions-item label="Phone">{{ userData.phone }}</el-descriptions-item>
@@ -91,6 +92,7 @@ import { ElMessage } from 'element-plus';
   
   <style scoped>
   .fullscreen-section {
+    width: 25%;
     display: block;
     height: 100vh;
     background-color: #f0f0f0;
