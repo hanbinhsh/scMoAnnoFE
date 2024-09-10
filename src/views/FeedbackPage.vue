@@ -4,14 +4,14 @@
       <section class="fullscreen-section">
         <h1>User Feedbacks</h1>
         <el-table :data="feedbackList" style="width: 100%">
-            <el-table-column prop="user_name" label="User Name" width="180"></el-table-column>
-            <el-table-column prop="email" label="User Email" width="180"></el-table-column>
-            <el-table-column prop="phone" label="User Phone" width="180"></el-table-column>
-            <el-table-column prop="subject" label="subject" width="180"></el-table-column>
-            <el-table-column prop="message" label="message" width="auto"></el-table-column>
-            <el-table-column prop="create_time" label="createTime" width="180">
+            <el-table-column prop="user_name" label="User Name" sortable></el-table-column>
+            <el-table-column prop="email" label="User Email" sortable></el-table-column>
+            <el-table-column prop="phone" label="User Phone" sortable></el-table-column>
+            <el-table-column prop="subject" label="subject" sortable></el-table-column>
+            <el-table-column prop="message" label="message" sortable></el-table-column>
+            <el-table-column prop="created_time" label="createTime" width="180">
                 <template #default="{ row }">
-                    {{ formatDate(row.createTime) }}
+                    {{ formatDate(row.created_time) }}
                 </template>
             </el-table-column>
             <el-table-column fixed="right" label="Operations" width="180">
