@@ -2,20 +2,26 @@
   <div class="main-page">
     <MainHeader></MainHeader>
     <section class="profile-section">
-      <!-- 背景图片 -->
       <div>
-        <img src="@/assets/background/1.png" alt="旋转的图片" class="rotating-image" style="z-index: 5; top: 30%; left: 80%;" />
-        <img src="@/assets/background/2.png" alt="旋转的图片" class="rotating-image" style="z-index: 4; top: 30%; left: 80%;" />
-        <img src="@/assets/background/3.png" alt="旋转的图片" class="rotating-image" style="z-index: 1; top: 80%; left: 30%;" />
-        <img src="@/assets/background/4.png" alt="旋转的图片" class="rotating-image" style="z-index: 3; top: 15%; left: 10%;" />
-        <img src="@/assets/background/5.png" alt="旋转的图片" class="rotating-image" style="z-index: 2; top: 15%; left: 10%;" />
+        <!-- 背景图 -->
+        <img src="@/assets/background/1.png" alt="旋转的图片" class="rotating-image"
+          style="z-index: 5; top: 30%; left: 80%;" />
+        <img src="@/assets/background/2.png" alt="旋转的图片" class="rotating-image"
+          style="z-index: 4; top: 30%; left: 80%;" />
+        <img src="@/assets/background/3.png" alt="旋转的图片" class="rotating-image"
+          style="z-index: 1; top: 80%; left: 30%;" />
+        <img src="@/assets/background/4.png" alt="旋转的图片" class="rotating-image"
+          style="z-index: 3; top: 15%; left: 10%;" />
+        <img src="@/assets/background/5.png" alt="旋转的图片" class="rotating-image"
+          style="z-index: 2; top: 15%; left: 10%;" />
       </div>
 
       <!-- 用户信息卡片 -->
       <el-card class="user-card" shadow="hover" style="z-index: 100;">
         <div class="user-header">
           <!-- 显示头像 -->
-          <el-avatar :src="userData.avatar" size="large"></el-avatar>
+          <el-avatar :src="userData.avatarBase64 ? 'data:image/jpeg;base64,' + userData.avatarBase64 : ''"
+            size="large"></el-avatar>
           <div class="user-info">
             <h2>{{ userData.userName }}</h2>
             <p>{{ userData.email }}</p>
@@ -28,12 +34,10 @@
       <!-- 编辑对话框 -->
       <el-dialog v-model="editDialogVisible" title="Edit Information" width="500" align-center>
         <el-form :model="User" label-width="100px" label-position="left">
-          <!-- 上传头像预览 -->
+          <!-- 头像预览 -->
           <el-form-item label="Avatar">
-            <!-- 点击头像预览触发文件选择 -->
-            <el-avatar :src="avatarPreview || User.avatar" class="clickable-avatar" @click="triggerFileInput" size="large"></el-avatar>
-            <!-- 隐藏的文件输入框 -->
-            <input type="file" ref="fileInput" @change="handleFileChange" accept="image/*" style="display: none;" />
+            <el-avatar :src="avatarPreview" size="large" class="avatar-preview clickable-avatar" @click="triggerFileInput"></el-avatar>
+            <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange" />
           </el-form-item>
           <el-form-item label="User Name">
             <el-input v-model="User.userName"></el-input>
@@ -73,44 +77,35 @@ export default {
     return {
       editDialogVisible: false,
       User: null,
-      userData: JSON.parse(sessionStorage.getItem('userData')) || {}, // 存储用户信息
-      avatarFile: null, // 存储用户选择的头像文件
-      avatarPreview: '', // 头像预览URL
+      avatarFile: null,
+      avatarPreview: '', // 用于头像预览的 Base64 字符串
+      userData: JSON.parse(sessionStorage.getItem('userData')) || {},
     };
   },
   methods: {
     Operation() {
       this.editDialogVisible = true;
       this.User = { ...this.userData, psw: '' }; // 创建用户数据的副本，且密码初始为空
-      this.avatarPreview = this.userData.avatar; // 初始化头像预览
-    },
-    triggerFileInput() {
-      this.$refs.fileInput.click(); // 触发隐藏的文件输入框
-    },
-    handleFileChange(event) {
-      const file = event.target.files[0];
-      if (file) {
-        this.avatarFile = file;
-        this.avatarPreview = URL.createObjectURL(file); // 显示头像预览
-      }
+      this.avatarPreview = this.userData.avatarBase64 ? 'data:image/jpeg;base64,' + this.userData.avatarBase64 : '';
     },
     async confirmEdit() {
       try {
-        // 如果选择了头像文件，则上传文件
-        if (this.avatarFile) {
-          const formData = new FormData();
-          formData.append('avatar', this.avatarFile);
-          const uploadResponse = await axios.post(`/api/uploadAvatar`, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-          });
-          this.User.avatar = uploadResponse.data.url; // 更新用户头像URL
+        const formData = new FormData();
+        for (const key in this.User) {
+          formData.append(key, this.User[key]);
         }
+        if (this.avatarFile) {
+          formData.append('avatar', this.avatarFile);
+        }
+        formData.delete('avatarBase64')
+        await axios.post(`/api/updateUser`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
 
-        // 保存其他用户信息
-        await axios.post(`/api/updateUser`, this.User);
         const response = await axios.post('/api/findUserByUserId', { userId: this.User.userId });
-        sessionStorage.setItem('userData', JSON.stringify(response.data.data));
-        window.location.reload();
+        const updatedUser = response.data;
+        sessionStorage.setItem('userData', JSON.stringify(updatedUser));
+        window.location.reload()
         ElMessage.success('User updated successfully.');
       } catch (error) {
         ElMessage.error('Failed to update user.');
@@ -118,7 +113,45 @@ export default {
       } finally {
         this.editDialogVisible = false;
       }
-    }
+    },
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.processImage(file);
+      }
+    },
+    processImage(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          const size = 256;
+
+          // 计算缩放比例
+          const scale = Math.max(img.width / size, img.height / size);
+          const x = (img.width / 2) - (size / 2) * scale;
+          const y = (img.height / 2) - (size / 2) * scale;
+
+          canvas.width = size;
+          canvas.height = size;
+          ctx.drawImage(img, x, y, size * scale, size * scale, 0, 0, size, size);
+          this.avatarPreview = canvas.toDataURL('image/jpeg');
+          canvas.toBlob((blob) => {
+            this.avatarFile = new File([blob], file.name, { type: 'image/jpeg' });
+          });
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+    triggerFileInput() {
+      this.$refs.fileInput.click();
+    },
+  },
+  mounted() {
+    this.avatarPreview = this.userData.avatarBase64 ? 'data:image/jpeg;base64,' + this.userData.avatarBase64 : '';
   },
 };
 </script>
@@ -163,7 +196,8 @@ export default {
 }
 
 .clickable-avatar {
-  cursor: pointer; /* 让鼠标指针在悬停头像时变成点击状态 */
+  cursor: pointer;
+  /* 让鼠标指针在悬停头像时变成点击状态 */
 }
 
 .dialog-footer {

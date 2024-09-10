@@ -16,7 +16,7 @@ module.exports = defineConfig({
       '/api': {
         // 指定目标服务器地址（例如后台API接口）
         target: 'http://localhost:8868',
-        
+
         // 设置为true，允许跨域请求时重写源信息（Origin header）
         changeOrigin: true,
 
