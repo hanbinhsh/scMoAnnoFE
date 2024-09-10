@@ -73,6 +73,12 @@ const routes = [
     component: () => import('../views/ManageTasks.vue'),
     meta: { title: 'ManageTasks', requiresAuth:true, requiresLogin:true }
   },
+  {
+    path: '/demo',
+    name: 'demo',
+    component: () => import('../views/demo.vue'),
+    meta: { title: 'demo' }
+  },
 ]
 
 const router = createRouter({

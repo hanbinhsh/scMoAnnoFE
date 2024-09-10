@@ -5,9 +5,10 @@
       <div class="upload-row" id="upload-row">
         <!-- 文件上传组件 -->
         <el-upload
+          v-model:file-list="scRNASeqFile"
           class="upload"
           drag
-          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          action=""
           :limit="1"
           :auto-upload="false"
         >
@@ -23,9 +24,10 @@
         </el-upload>
 
         <el-upload
+          v-model:file-list="scATACSeqFile"
           class="upload"
           drag
-          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          action=""
           :limit="1"
           :auto-upload="false"
         >
@@ -41,9 +43,10 @@
         </el-upload>
 
         <el-upload
+          v-model:file-list="tagFile"
           class="upload"
           drag
-          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          action=""
           :limit="1"
           :auto-upload="false"
         >
@@ -69,7 +72,7 @@
         <el-button type="default" class="action-button" @click="open = true" ref="ref3">Tutorial</el-button>
         <el-button type="primary" class="action-button">Example</el-button>
         <el-button type="warning" class="action-button">Reset</el-button>
-        <el-button type="success" class="action-button" id="button-row">Upload</el-button>
+        <el-button type="success" class="action-button" id="button-row" @click="UploadFiles()">Upload</el-button>
       </div>
     </section>
   </div>
@@ -87,15 +90,50 @@
 
 <script>
 import MainHeader from "../components/MainHeader.vue";
+import axios from 'axios';
 export default {
   name: "UploadPage",
   components: {
     MainHeader,
   },
   data() {
-    return {};
+    return {
+      scRNASeqFile: [], // 存储 scRNA-seq 文件的数组  
+      scATACSeqFile: [], // 存储 scATAC-seq 文件的数组  
+      tagFile: [], // 存储 Tag 文件的数组 
+    };
   },
-  methods: {},
+  methods: {
+    async UploadFiles() {   
+      if (this.scRNASeqFile.length > 0 && this.scATACSeqFile.length > 0 && this.tagFile.length > 0) {
+        const userId = JSON.parse(sessionStorage.getItem('userData')).userId;
+        const response = await axios.post('/api/insertTask', {taskName: "任务一", userId: userId});
+        if (response.data.code == 1) {
+          axios.post('/api/insertFile', {taskName: "任务一"});
+
+          const formData = new FormData();
+          formData.append('file', this.scRNASeqFile[0].raw);
+          formData.append('taskName', '任务一');
+          axios.post('/api/uploadOneFile', formData, {})  
+          
+          const formData2 = new FormData();
+          formData2.append('file', this.scATACSeqFile[0].raw);
+          formData2.append('taskName', '任务一');
+          axios.post('/api/uploadOneFile', formData2, {})
+
+          const formData3 = new FormData();
+          formData3.append('file', this.tagFile[0].raw); 
+          formData3.append('taskName', '任务一');
+          axios.post('/api/uploadOneFile', formData3, {})
+
+        }    
+      } else {  
+        alert('请选择一个文件后再上传');  
+      }  
+  
+      // 如果需要同时上传多个文件或不同类型的文件，可以在这里添加更多逻辑  
+    },
+  },
 };
 </script>
 
@@ -104,6 +142,8 @@ import { UploadFilled } from "@element-plus/icons-vue";
 import { ref } from 'vue';
 
 const open = ref(false);
+
+const file = ref()
 </script>
 
 <style scoped>
