@@ -2,7 +2,7 @@
   <div class="main-page">
     <MainHeader></MainHeader>
     <div>
-      <section class="fullscreen-mainpage-section with-background" style="position: relative;">
+      <section class="fullscreen-mainpage-section" style="position: relative;">
         <div>
           <img src="@/assets/background/1.png" alt="旋转的图片" class="rotating-image"
             style="z-index: 5; top: 30%; left: 80%;" />
@@ -92,27 +92,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.rotating-image {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  animation: rotate 25s linear infinite;
-}
-
-@keyframes rotate {
-  from {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
-}
-
-.intro-section{
-  z-index: 999; 
-  background-color: #ffffff; 
-  position: relative;
-}
-</style>

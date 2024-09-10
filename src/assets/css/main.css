@@ -106,12 +106,6 @@
     height: auto;
 }
 
-.with-background {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
 /* 添加批量操作按钮的样式 */
 .batch-actions {
     margin-bottom: 15px;
@@ -125,4 +119,26 @@
     display: flex;
     justify-content: center;
     margin-top: 20px;
+}
+
+.rotating-image {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    animation: rotate 25s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+.intro-section {
+    z-index: 999;
+    background-color: #ffffff;
+    position: relative;
 }

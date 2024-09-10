@@ -54,7 +54,7 @@
     </section>
 
     <!-- 删除确认对话框 -->
-    <el-dialog v-model="deleteDialogVisible" title="Warning" width="500">
+    <el-dialog v-model="deleteDialogVisible" title="Warning" width="500" align-center>
       <span>User <strong style="color: #e74c3c;">{{ selectedUser.userName }}</strong> will be deleted</span>
       <template #footer>
         <div class="dialog-footer">
@@ -65,7 +65,7 @@
     </el-dialog>
 
     <!-- 批量删除确认对话框 -->
-    <el-dialog v-model="batchDeleteDialogVisible" title="Batch Delete Confirmation" width="500">
+    <el-dialog v-model="batchDeleteDialogVisible" title="Batch Delete Confirmation" width="500" align-center>
       <span>Are you sure you want to delete the selected users?</span>
       <template #footer>
         <div class="dialog-footer">
@@ -76,7 +76,7 @@
     </el-dialog>
 
     <!-- 编辑对话框 -->
-    <el-dialog v-model="editDialogVisible" title="Edit User" width="500">
+    <el-dialog v-model="editDialogVisible" title="Edit User" width="500" align-center>
       <el-form :model="selectedUser" label-width="100px" label-position="left">
         <el-form-item label="User Name" class="form-item">
           <el-input v-model="selectedUser.userName" class="form-input"></el-input>
