@@ -21,7 +21,7 @@
         <!-- 用户头像列 -->
         <el-table-column label="Avatar" width="80">
           <template #default="{ row }">
-            <el-avatar :size="50" :src="row.avatarBase64 ? 'data:image/jpeg;base64,' + row.avatarBase64 : ''"></el-avatar>
+            <el-avatar :size="24" :src="row.avatarBase64 ? 'data:image/jpeg;base64,' + row.avatarBase64 : defaultAvatar"></el-avatar>
           </template>
         </el-table-column>
         <el-table-column prop="userName" label="User Name" sortable></el-table-column>
@@ -125,6 +125,7 @@
 import MainHeader from "../components/MainHeader.vue";
 import axios from "axios";
 import { ElMessage } from 'element-plus';
+import logo from '../assets/logo.png';
 
 export default {
   name: "WorkSpace",
@@ -145,6 +146,7 @@ export default {
       pageSize: 10, // 每页显示条数
       sortProp: '', // 当前排序属性
       sortOrder: '', // 当前排序方向
+      defaultAvatar: logo,
     };
   },
   methods: {

@@ -59,13 +59,13 @@ const routes = [
     path: '/Feedback',
     name: 'Feedback',
     component: () => import('../views/FeedbackView.vue'),
-    meta: { title: 'Feedback' }
+    meta: { title: 'Feedback', requiresLogin:true }
   },
   {
     path: '/ManageFeedback',
     name: 'ManageFeedback',
     component: () => import('../views/ManageFeedback.vue'),
-    meta: { title: 'ManageFeedback' }
+    meta: { title: 'ManageFeedback', requiresAuth:true, requiresLogin:true }
   },
   {
     path: '/ManageTasks',

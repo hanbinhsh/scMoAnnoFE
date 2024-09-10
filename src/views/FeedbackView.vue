@@ -32,6 +32,8 @@
 <script>
 import MainHeader from "../components/MainHeader.vue"
 import axios from "axios";
+import { ElMessage } from 'element-plus';
+
 export default {
   components: {
     MainHeader
@@ -57,11 +59,11 @@ export default {
         await axios.post("/api/feedback", this.feedbackForm)
           .then(response => {
             if (response.data.code === 1){
-              alert("The feedback is successful");
+              ElMessage.success("Feedback success");
 
             } else{
               console.error("Feedback failed:", response.data.msg);
-              alert(response.data.msg);
+              ElMessage.error(response.data.msg);
             }
           })
           .catch(error => {
