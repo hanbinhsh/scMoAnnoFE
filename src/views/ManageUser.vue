@@ -18,6 +18,12 @@
       >
         <!-- 多选功能 -->
         <el-table-column type="selection" width="55"></el-table-column>
+        <!-- 用户头像列 -->
+        <el-table-column label="Avatar" width="80">
+          <template #default="{ row }">
+            <el-avatar :size="50" :src="row.avatarBase64 ? 'data:image/jpeg;base64,' + row.avatarBase64 : ''"></el-avatar>
+          </template>
+        </el-table-column>
         <el-table-column prop="userName" label="User Name" sortable></el-table-column>
         <el-table-column prop="email" label="Email" sortable></el-table-column>
         <el-table-column prop="phone" label="Phone" sortable></el-table-column>
