@@ -358,17 +358,3 @@ export default {
   },
 };
 </script>
-
-
-<style scoped>
-.fullscreen-section {
-  display: flex;
-  flex-direction: column;
-  height: 94vh;
-  background-color: #f0f0f0;
-  position: relative;
-  padding: 30px;
-  margin-top: 60px;
-  box-sizing: border-box;
-}
-</style>

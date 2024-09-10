@@ -11,7 +11,10 @@
             Register
         </el-menu-item>
         <el-sub-menu v-if="userData.userName" index="">
-            <template #title>{{ userData.userName }}</template>
+            <template #title>
+                <el-avatar :src="userData.avatarBase64 ? 'data:image/jpeg;base64,' + userData.avatarBase64 : defaultAvatar" size="small"></el-avatar>&nbsp;
+                {{ userData.userName }}
+            </template>
             <el-menu-item index="Profile" :class="{ 'is-active': activeIndex === 'Profile' }" id="Profile">Profile</el-menu-item>
             <el-menu-item @click="logout()">Log out</el-menu-item>
         </el-sub-menu>
@@ -31,7 +34,10 @@
         <el-menu-item index="Example" :class="{ 'is-active': activeIndex === 'Example' }">
             Example
         </el-menu-item>
-        <el-menu-item index="Feedback" :class="{ 'is-active': activeIndex === 'Feedback' }" v-if="userData.userName">
+        <el-menu-item index="Feedback" :class="{ 'is-active': activeIndex === 'Feedback' }" v-if="userData.userName && !userData.isAdmin">
+            Feedback
+        </el-menu-item>
+        <el-menu-item index="FeedbackPage" :class="{ 'is-active': activeIndex === 'FeedbackPage' }" v-if="userData.userName && userData.isAdmin">
             Feedback
         </el-menu-item>
     </el-menu>
@@ -55,11 +61,14 @@
 </style>
 
 <script>
+import logo from '../assets/logo.png';
+
 export default {
     name: "MainHeader",
     data() {
         return {
             activeIndex: "", // 当前激活的菜单项
+            defaultAvatar: logo,
             userData: JSON.parse(sessionStorage.getItem('userData')) || {},
         };
     },

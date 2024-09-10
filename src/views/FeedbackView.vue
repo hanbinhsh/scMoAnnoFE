@@ -120,4 +120,8 @@ export default {
   font-size: 16px;
   padding: 10px 20px;
 }
+
+.fullscreen-section {
+    height: 94%;
+}
 </style>

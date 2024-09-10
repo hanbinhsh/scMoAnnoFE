@@ -1,7 +1,7 @@
 <template>
   <div class="main-page">
     <MainHeader></MainHeader>
-    <section class="content">
+    <section class="fullscreen-section">
       <div class="chart-container">
         <div id="main" class="chart"></div>
         <div class="table-container">
@@ -32,7 +32,7 @@ import 'element-plus/theme-chalk/el-table.css';
 import 'element-plus/theme-chalk/el-pagination.css';
 
 export default {
-  name: "UploadPage",
+  name: "Example",
   components: {
     MainHeader,
     ElTable,
@@ -72,15 +72,9 @@ export default {
 </script>
 
 <style scoped>
-.content {
-  display: flex;
-  align-items: flex-start;
-  padding: 20px;
-  background-color: #f5f5f5;
-  height: 100%;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
+.fullscreen-section {
+  padding-left: 150px;
+  padding-right: 150px;
 }
 
 .chart-container {
