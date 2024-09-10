@@ -6,6 +6,9 @@ import router from './router'
 import "@/assets/css/main.css"
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
+window.__VUE_PROD_DEVTOOLS__ = false;
+window.__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ = false;
+
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
