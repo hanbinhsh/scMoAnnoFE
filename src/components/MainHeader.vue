@@ -12,16 +12,25 @@
         </el-menu-item>
         <el-sub-menu v-if="userData.userName" index="">
             <template #title>
-                <el-avatar :src="userData.avatarBase64 ? 'data:image/jpeg;base64,' + userData.avatarBase64 : defaultAvatar" size="small"></el-avatar>&nbsp;
+                <el-avatar
+                    :src="userData.avatarBase64 ? 'data:image/jpeg;base64,' + userData.avatarBase64 : defaultAvatar"
+                    size="small"></el-avatar>&nbsp;
                 {{ userData.userName }}
             </template>
-            <el-menu-item index="Profile" :class="{ 'is-active': activeIndex === 'Profile' }" id="Profile">Profile</el-menu-item>
+            <el-menu-item index="Profile" :class="{ 'is-active': activeIndex === 'Profile' }"
+                id="Profile">Profile</el-menu-item>
             <el-menu-item @click="logout()">Log out</el-menu-item>
         </el-sub-menu>
-        <el-menu-item index="ManageUser" :class="{ 'is-active': activeIndex === 'ManageUser' }" v-if="userData?.isAdmin">
+        <el-menu-item index="ManageUser" :class="{ 'is-active': activeIndex === 'ManageUser' }"
+            v-if="userData?.isAdmin">
             <strong>ManageUser</strong>
         </el-menu-item>
-        <el-menu-item index="ManageTasks" :class="{ 'is-active': activeIndex === 'ManageTasks' }" v-if="userData?.isAdmin">
+        <el-menu-item index="ManageTasks" :class="{ 'is-active': activeIndex === 'ManageTasks' }"
+            v-if="userData?.isAdmin">
+            <strong>ManageTasks</strong>
+        </el-menu-item>
+        <el-menu-item index="ManageFeedback" :class="{ 'is-active': activeIndex === 'ManageFeedback' }"
+            v-if="userData.userName && userData.isAdmin">
             <strong>ManageTasks</strong>
         </el-menu-item>
         <el-menu-item index="WorkSpace" :class="{ 'is-active': activeIndex === 'WorkSpace' }" id="WorkSpase"
@@ -34,31 +43,11 @@
         <el-menu-item index="Example" :class="{ 'is-active': activeIndex === 'Example' }">
             Example
         </el-menu-item>
-        <el-menu-item index="Feedback" :class="{ 'is-active': activeIndex === 'Feedback' }" v-if="userData.userName && !userData.isAdmin">
-            Feedback
-        </el-menu-item>
-        <el-menu-item index="FeedbackPage" :class="{ 'is-active': activeIndex === 'FeedbackPage' }" v-if="userData.userName && userData.isAdmin">
+        <el-menu-item index="Feedback" :class="{ 'is-active': activeIndex === 'Feedback' }" v-if="userData.userName">
             Feedback
         </el-menu-item>
     </el-menu>
 </template>
-
-<style scoped>
-.el-menu--horizontal>.el-menu-item:nth-child(1) {
-    margin-right: auto;
-}
-
-.el-menu {
-    position: fixed;
-    z-index: 1000;
-    width: 100%;
-    border-bottom: 0px;
-}
-
-.main-header {
-    background: linear-gradient(0deg, rgba(255, 255, 255, 0), #ffffff);
-}
-</style>
 
 <script>
 import logo from '../assets/logo.png';
@@ -92,3 +81,20 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.el-menu--horizontal>.el-menu-item:nth-child(1) {
+    margin-right: auto;
+}
+
+.el-menu {
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    border-bottom: 0px;
+}
+
+.main-header {
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0), #ffffff);
+}
+</style>

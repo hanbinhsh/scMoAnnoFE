@@ -62,10 +62,10 @@ const routes = [
     meta: { title: 'Feedback' }
   },
   {
-    path: '/FeedbackPage',
-    name: 'FeedbackPage',
-    component: () => import('../views/FeedbackPage.vue'),
-    meta: { title: 'FeedbackPage' }
+    path: '/ManageFeedback',
+    name: 'ManageFeedback',
+    component: () => import('../views/ManageFeedback.vue'),
+    meta: { title: 'ManageFeedback' }
   },
   {
     path: '/ManageTasks',
