@@ -2,6 +2,8 @@
   <div class="main-page">
     <MainHeader></MainHeader>
     <section class="fullscreen-section">
+      <h1 class="page-name">Manage Feedbacks</h1>
+      <el-divider />
       <el-table :data="feedbackList" style="width: 100%">
         <!-- 用户头像列 -->
         <el-table-column label="Avatar" width="80">

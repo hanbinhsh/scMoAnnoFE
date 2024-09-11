@@ -131,10 +131,14 @@
 
 .fullscreen-section {
     display: block;
-    min-height: 88%;
+    min-height: 90%;
     background-color: #f0f0f0;
     position: relative;
     scroll-snap-align: none;
-    padding: 30px;
+    padding: 15px 30px 30px 30px;
     margin-top: 60px;
+}
+
+.page-name{
+    color: #3c3c3c;
 }

@@ -29,7 +29,7 @@
                 </template>
                 <el-menu-item index="ManageUser" :class="{ 'is-active': activeIndex === 'ManageUser' }"
                     v-if="userData?.isAdmin">
-                    ManageUser
+                    ManageUsers
                 </el-menu-item>
                 <el-menu-item index="ManageTasks" :class="{ 'is-active': activeIndex === 'ManageTasks' }"
                     v-if="userData?.isAdmin">
@@ -37,7 +37,7 @@
                 </el-menu-item>
                 <el-menu-item index="ManageFeedback" :class="{ 'is-active': activeIndex === 'ManageFeedback' }"
                     v-if="userData.userName && userData.isAdmin">
-                    ManageFeedback
+                    ManageFeedbacks
                 </el-menu-item>
             </el-sub-menu>
             <el-menu-item index="WorkSpace" :class="{ 'is-active': activeIndex === 'WorkSpace' }" id="WorkSpase"
@@ -176,7 +176,7 @@ export default {
 }
 
 .dark-mode .main-header {
-    background: linear-gradient(0deg, rgba(255, 255, 255, 0), #2c2c2c);
+    background: #3e3e3e;
 }
 
 .dark::view-transition-old(root) {

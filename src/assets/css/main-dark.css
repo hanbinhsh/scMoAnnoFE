@@ -21,3 +21,7 @@
 .dark-mode .login-box {
     background-color: #3f3f3f !important;
 }
+
+.dark-mode .page-name{
+    color: #eeeeee !important;
+}

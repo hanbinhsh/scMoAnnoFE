@@ -2,6 +2,8 @@
   <div class="main-page">
     <MainHeader></MainHeader>
     <section class="fullscreen-section">
+      <h1 class="page-name">Manage Users</h1>
+      <el-divider />
       <!-- 批量删除按钮 -->
       <div class="batch-actions">
         <el-button type="danger" @click="showBatchDeleteDialog" :disabled="selectedUsers.length === 0">

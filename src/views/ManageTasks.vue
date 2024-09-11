@@ -2,6 +2,8 @@
   <div class="main-page">
     <MainHeader></MainHeader>
     <section class="fullscreen-section">
+      <h1 class="page-name">Manage Tasks</h1>
+      <el-divider />
       <!-- 批量操作按钮 -->
       <div class="batch-actions">
         <el-button type="primary" @click="showBatchEditDialog" :disabled="selectedTasks.length === 0">
@@ -21,6 +23,20 @@
       >
         <!-- 多选功能 -->
         <el-table-column type="selection" width="55"></el-table-column>
+
+        <!-- 用户头像列 -->
+        <el-table-column label="Avatar" width="80">
+          <template #default="{ row }">
+            <el-avatar :size="24" :src="row.avatarBase64 ? 'data:image/jpeg;base64,' + row.avatarBase64 : defaultAvatar"></el-avatar>
+          </template>
+        </el-table-column>
+        <!-- 显示上传者的用户名 -->
+        <el-table-column prop="user_name" label="Uploader Name" sortable></el-table-column>
+        <!-- 显示上传者的电子邮件 -->
+        <el-table-column prop="email" label="Email" sortable></el-table-column>
+        <!-- 显示上传者的电话 -->
+        <el-table-column prop="phone" label="Phone" sortable></el-table-column>
+
         <!-- 显示任务名 -->
         <el-table-column prop="task_name" label="Task Name" sortable></el-table-column>
         <!-- 显示任务开始时间 -->
@@ -41,18 +57,7 @@
             <el-tag :type="statusType(row.status)">{{ statusText(row.status) }}</el-tag>
           </template>
         </el-table-column>
-        <!-- 用户头像列 -->
-        <el-table-column label="Avatar" width="80">
-          <template #default="{ row }">
-            <el-avatar :size="24" :src="row.avatarBase64 ? 'data:image/jpeg;base64,' + row.avatarBase64 : ''"></el-avatar>
-          </template>
-        </el-table-column>
-        <!-- 显示上传者的用户名 -->
-        <el-table-column prop="user_name" label="Uploader Name" sortable></el-table-column>
-        <!-- 显示上传者的电子邮件 -->
-        <el-table-column prop="email" label="Email" sortable></el-table-column>
-        <!-- 显示上传者的电话 -->
-        <el-table-column prop="phone" label="Phone" sortable></el-table-column>
+        
         <!-- 显示操作列 -->
         <el-table-column fixed="right" label="Operations" width="180">
           <template #default="{ row }">
@@ -172,6 +177,7 @@
 import MainHeader from "../components/MainHeader.vue";
 import axios from "axios";
 import { ElMessage } from 'element-plus';
+import logo from '../assets/logo.png';
 
 export default {
   name: "WorkSpace",
@@ -193,7 +199,8 @@ export default {
       currentPage: 1,
       pageSize: 10,
       sortProp: '', // 当前排序属性
-      sortOrder: '' // 当前排序顺序
+      sortOrder: '', // 当前排序顺序
+      defaultAvatar: logo,
     };
   },
   methods: {
