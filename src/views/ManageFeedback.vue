@@ -2,7 +2,27 @@
   <div class="main-page">
     <MainHeader></MainHeader>
     <section class="fullscreen-section">
-      <el-table :data="feedbackList" style="width: 100%">
+      <h1 class="page-name">Manage Feedbacks</h1>
+      <el-divider />
+      <div class="batch-actions">
+        <el-button type="danger" @click="showBatchDeleteDialog" :disabled="selectedFeedback.length === 0">
+          Batch Delete
+        </el-button>
+      </div>
+      <el-table 
+        :data="feedbackList" 
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+        @sort-change="handleSortChange"
+      >
+        <!-- 多选功能 -->
+        <el-table-column type="selection" width="55"></el-table-column>
+        <!-- 用户头像列 -->
+        <el-table-column label="Avatar" width="80">
+          <template #default="{ row }">
+            <el-avatar :size="24" :src="row.avatarBase64 ? 'data:image/jpeg;base64,' + row.avatarBase64 : ''"></el-avatar>
+          </template>
+        </el-table-column>
         <el-table-column prop="user_name" label="User Name" sortable></el-table-column>
         <el-table-column prop="email" label="User Email" sortable></el-table-column>
         <el-table-column prop="phone" label="User Phone" sortable></el-table-column>
@@ -28,7 +48,20 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="deleteDialogVisible = false">Cancel</el-button>
-          <el-button type="danger" @click="deleteDialogVisible = false; deleteFeedback(selectedFeedback.feedbackId)">
+          <el-button type="danger" @click="deleteDialogVisible = false; deleteFeedback(selectedFeedback.feedback_id)">
+            Confirm
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+    <!-- 批量删除确认对话框 -->
+    <el-dialog v-model="batchDeleteDialogVisible" title="Batch Delete Confirmation" width="500" align-center>
+      <span>Are you sure you want to delete the selected feedbacks?</span>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="batchDeleteDialogVisible = false">Cancel</el-button>
+          <el-button type="danger" @click="confirmBatchDelete">
             Confirm
           </el-button>
         </div>
@@ -62,6 +95,7 @@ export default {
     return {
       feedbackList: [],
       deleteDialogVisible: false,
+      batchDeleteDialogVisible: false,
       messageDialogVisible: false,
       selectedFeedback: [],
     };
@@ -71,9 +105,23 @@ export default {
       this.deleteDialogVisible = true;
       this.selectedFeedback = feedback;
     },
+    showBatchDeleteDialog() {
+      this.batchDeleteDialogVisible = true;
+    },
     showMessageDialog(feedback) {
       this.messageDialogVisible = true;
       this.selectedFeedback = feedback;
+    },
+    showMessageDialog(feedback) {
+      this.messageDialogVisible = true;
+      this.selectedFeedback = feedback;
+    },
+    handleSelectionChange(val) {
+      this.selectedFeedback = val;
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.updatePaginatedTaskList();
     },
     async fetchFeedbacks() {
       try {
@@ -91,6 +139,7 @@ export default {
       }
     },
     async deleteFeedback(feedbackId) {
+      // console.log(feedbackId)
       try {
         const response = await axios.delete(`/api/deleteFeedback/${feedbackId}`);
         if (response.data.code === 1) {
@@ -104,6 +153,21 @@ export default {
       } catch (error) {
         console.error('Failed to delete feedback:', error);
       }
+    },
+    async deleteFeedbackID(feedbackId) {
+      try {
+        await axios.delete(`/api/deleteFeedback/${feedbackId}`);
+      } catch (error) {
+        console.error("Delete failed:", error);
+      }
+    },
+    async confirmBatchDelete() {
+      this.batchDeleteDialogVisible = false;
+      for (const feedback of this.selectedFeedback) {
+        await this.deleteFeedbackID(feedback.feedback_id);
+      }
+      ElMessage.success('Batch delete success.');
+      this.fetchFeedbacks();
     },
     formatDate(dateString) {
       const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };

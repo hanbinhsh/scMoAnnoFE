@@ -3,19 +3,22 @@
     <MainHeader></MainHeader>
     <el-main class="fullscreen-section">
       <el-row type="flex" justify="center">
-        <el-col :span="12">
-          <el-card class="feedback-card">
-            <div slot="header" class="card-header">
-              <span>Feedback</span>
-            </div>
+        <el-col :span="10">
+          <el-card shadow="always">
+            <template #header>
+              <div slot="header" class="card-header">
+                <span>Feedback</span>
+                <p class="feedback-text">You can submit your feedback below, and we will get your message.</p>
+              </div>
+            </template>
             <div class="card-body">
-              <p class="feedback-text">You can submit your feedback below, and we will get your message.</p>
               <el-form ref="feedbackForm" :model="feedbackForm" label-width="120px" class="feedback-form">
                 <el-form-item label="Subject" prop="subject">
                   <el-input v-model="feedbackForm.subject" placeholder="Subject" class="input-field"></el-input>
                 </el-form-item>
                 <el-form-item label="Message" prop="message">
-                  <el-input type="textarea" :rows="8" v-model="feedbackForm.message" placeholder="Your Message" class="textarea-field"></el-input>
+                  <el-input type="textarea" :rows="8" v-model="feedbackForm.message" placeholder="Your Message"
+                    class="textarea-field"></el-input>
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" @click="submitForm" class="submit-button">Send Message</el-button>
@@ -55,13 +58,13 @@ export default {
       console.log('Feedback submitted:', this.feedbackForm);
       console.log(this.userData)
       this.feedbackForm.userId = this.userData.userId;
-      try{
+      try {
         await axios.post("/api/feedback", this.feedbackForm)
           .then(response => {
-            if (response.data.code === 1){
+            if (response.data.code === 1) {
               ElMessage.success("Feedback success");
 
-            } else{
+            } else {
               console.error("Feedback failed:", response.data.msg);
               ElMessage.error(response.data.msg);
             }
@@ -69,7 +72,7 @@ export default {
           .catch(error => {
             console.error("Feedback failed:", error);
           });
-      } catch(error) {
+      } catch (error) {
         console.error("Feedback failed:", error);
       }
       // 重置表单
@@ -80,29 +83,27 @@ export default {
 </script>
 
 <style scoped>
-.nav-button {
-  color: white;
-  font-weight: bold;
-}
-
-.feedback-card {
-  border-radius: 10px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-}
-
 .card-header {
   font-size: 24px;
   font-weight: bold;
   color: #333;
 }
 
+.dark-mode .card-header{
+  color: #EEE;
+}
+
 .card-body {
-  padding: 20px;
+  padding: 0px 20px 0px 20px;
 }
 
 .feedback-text {
   color: #666;
   font-size: 16px;
+}
+
+.dark-mode .feedback-text{
+  color: #EEE;
 }
 
 .contact-info {
@@ -121,9 +122,5 @@ export default {
   border-radius: 4px;
   font-size: 16px;
   padding: 10px 20px;
-}
-
-.fullscreen-section {
-    height: 94%;
 }
 </style>

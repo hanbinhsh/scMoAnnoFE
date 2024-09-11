@@ -197,6 +197,11 @@ export default {
   color: #555;
 }
 
+.dark-mode .user-info p {
+  margin: 4px 0;
+  color: #ddd;
+}
+
 .clickable-avatar {
   cursor: pointer;
   /* 让鼠标指针在悬停头像时变成点击状态 */
