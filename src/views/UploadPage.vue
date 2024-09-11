@@ -141,7 +141,7 @@ export default {
           ElMessage.success('task created success.');
         }    
       } else {  
-        alert('请选择一个文件后再上传');  
+        ElMessage.error('请选择一个文件后再上传');  
       }  
   
       // 如果需要同时上传多个文件或不同类型的文件，可以在这里添加更多逻辑  
