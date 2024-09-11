@@ -173,6 +173,7 @@ export default {
 
 .dark-mode-toggle {
     margin: 13px;
+    margin-right: 30px;
 }
 
 .dark-mode .main-header {
