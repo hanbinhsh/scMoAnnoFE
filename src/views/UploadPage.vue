@@ -119,29 +119,29 @@ export default {
           }
         }
         const userId = JSON.parse(sessionStorage.getItem('userData')).userId;
-        const response = await axios.post('/api/insertTask', {taskName: "任务一", userId: userId});
+        const response = await axios.post('/api/insertTask', {taskName: taskName, userId: userId});
         if (response.data.code == 1) {
-          axios.post('/api/insertFile', {taskName: "任务一"});
+          axios.post('/api/insertFile', {taskName: taskName});
 
           const formData = new FormData();
           formData.append('file', this.scRNASeqFile[0].raw);
-          formData.append('taskName', '任务一');
+          formData.append('taskName', taskName);
           axios.post('/api/uploadOneFile', formData, {})  
           
           const formData2 = new FormData();
           formData2.append('file', this.scATACSeqFile[0].raw);
-          formData2.append('taskName', '任务一');
+          formData2.append('taskName', taskName);
           axios.post('/api/uploadOneFile', formData2, {})
 
           const formData3 = new FormData();
           formData3.append('file', this.tagFile[0].raw); 
-          formData3.append('taskName', '任务一');
+          formData3.append('taskName', taskName);
           axios.post('/api/uploadOneFile', formData3, {})
 
           ElMessage.success('task created success.');
         }    
       } else {  
-        ElMessage.error('请选择一个文件后再上传');  
+        ElMessage.error('please upload the required files!');  
       }  
   
       // 如果需要同时上传多个文件或不同类型的文件，可以在这里添加更多逻辑  
