@@ -104,14 +104,14 @@ export default {
     };
   },
   methods: {
-    async UploadFiles() {   
-      const isScRNASeqFileValid = this.scRNASeqFile.length > 0 && this.scRNASeqFile.every(file => file.name.endsWith('.h5'));
-      const isScATACSeqFileValid = this.scATACSeqFile.length > 0 && this.scATACSeqFile.every(file => file.name.endsWith('.h5ad'));
-      const isTagFileValid = this.tagFile.length > 0 && this.tagFile.every(file => file.name.endsWith('.csv'));
+    async UploadFiles() { 
+      const isScRNASeqFileValid = this.scRNASeqFile.length > 0 && this.scRNASeqFile.every(file => file.name.endsWith('.h5') || file.name.endsWith('.h5ad') || file.name.endsWith('.npy'));
+      const isScATACSeqFileValid = this.scATACSeqFile.length > 0 && this.scATACSeqFile.every(file => file.name.endsWith('.h5') || file.name.endsWith('.h5ad') || file.name.endsWith('.npy'));
+      const isTagFileValid = this.tagFile.length > 0 && this.tagFile.every(file => file.name.endsWith('.npy') || file.name.endsWith('.csv'));
       if (isScRNASeqFileValid && isScATACSeqFileValid && isTagFileValid) {
         let taskName = prompt('Please enter the task name:');
         while (true) {
-          const response = await axios.post('/api/findTaskByTaskName?taskName=' + encodeURIComponent(taskName));
+          const response = await axios.post('/api/findTaskByTaskName?taskName=' + taskName);
           if (response.data.code === 1) {
             break;
           } else {
@@ -126,16 +126,19 @@ export default {
           const formData = new FormData();
           formData.append('file', this.scRNASeqFile[0].raw);
           formData.append('taskName', taskName);
+          formData.append('fileType', 'scRNASeqFile');
           axios.post('/api/uploadOneFile', formData, {})  
           
           const formData2 = new FormData();
           formData2.append('file', this.scATACSeqFile[0].raw);
           formData2.append('taskName', taskName);
+          formData2.append('fileType', 'scATACSeqFile');
           axios.post('/api/uploadOneFile', formData2, {})
 
           const formData3 = new FormData();
           formData3.append('file', this.tagFile[0].raw); 
           formData3.append('taskName', taskName);
+          formData3.append('fileType', 'tagFile');
           axios.post('/api/uploadOneFile', formData3, {})
 
           ElMessage.success('task created success.');
