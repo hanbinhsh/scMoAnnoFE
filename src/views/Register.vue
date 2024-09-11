@@ -60,6 +60,11 @@ import { ElMessage } from 'element-plus';
 
 export default {
   name: 'RegisterForm',
+  data() {
+    return {
+      isDarkMode: false, // 黑暗模式开关
+    };
+  },
   setup() {
     const form = reactive({
       userName: '',
@@ -170,7 +175,14 @@ export default {
       goToHome,
       goToLogin,
     };
-  }
+  },
+  mounted() {
+    this.isDarkMode = JSON.parse(localStorage.getItem('isDarkMode')) || false;
+    if (this.isDarkMode) {
+      document.body.classList.toggle('dark-mode', this.isDarkMode);
+      document.documentElement.setAttribute('class', 'dark');
+    }
+  },
 };
 </script>
 

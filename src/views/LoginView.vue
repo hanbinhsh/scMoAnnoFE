@@ -74,6 +74,24 @@ const onSuccess = () => {
 };
 </script>
 
+<script>
+export default {
+    name: "LoginView",
+    data() {
+        return {
+            isDarkMode: false, // 黑暗模式开关
+        };
+    },
+    mounted() {
+        this.isDarkMode = JSON.parse(localStorage.getItem('isDarkMode')) || false;
+        if (this.isDarkMode) {
+            document.body.classList.toggle('dark-mode', this.isDarkMode);
+            document.documentElement.setAttribute('class', 'dark');
+        }
+    },
+};
+</script>
+
 <style scoped>
 .login-page {
   display: flex;
