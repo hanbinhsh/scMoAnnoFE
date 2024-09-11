@@ -1,11 +1,19 @@
 .main-page {
     scroll-snap-type: y mandatory;
-    overflow-y: auto;
+    /* overflow-y: auto; */
+    overflow-x: hidden;
     height: 100vh;
-    -ms-overflow-style: none;
-    /* 适用于 IE 和 Edge 浏览器 */
-    scrollbar-width: none;
-    /* 适用于 Firefox */
+
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #aaa;
+    border-radius: 6px;
 }
 
 .fullscreen-mainpage-section {
