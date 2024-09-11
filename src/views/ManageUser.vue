@@ -212,8 +212,16 @@ export default {
     // 确认编辑操作
     async confirmEdit() {
       try {
-        this.selectedUser.isAdmin = this.selectedUser.isAdmin ? 1 : 0;
-        await axios.post(`/api/updateUser`, this.selectedUser);
+        
+        const formData = new FormData();
+        for (const key in this.selectedUser) {
+          formData.append(key, this.selectedUser[key]);
+        }
+        formData.delete('avatarBase64')
+        await axios.post(`/api/updateUser`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
         this.fetchUserList();
         ElMessage.success('User updated successfully.');
       } catch (error) {
