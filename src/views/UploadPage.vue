@@ -141,7 +141,7 @@ export default {
           ElMessage.success('task created success.');
         }    
       } else {  
-        ElMessage.error('please upload the required files!');  
+        ElMessage.error('Please upload the required files!');  
       }  
   
       // 如果需要同时上传多个文件或不同类型的文件，可以在这里添加更多逻辑  
