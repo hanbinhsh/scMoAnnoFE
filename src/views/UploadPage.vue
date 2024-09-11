@@ -90,6 +90,7 @@
 <script>
 import MainHeader from "../components/MainHeader.vue";
 import axios from 'axios';
+import { ElMessage } from 'element-plus';
 export default {
   name: "UploadPage",
   components: {
@@ -104,7 +105,19 @@ export default {
   },
   methods: {
     async UploadFiles() {   
-      if (this.scRNASeqFile.length > 0 && this.scATACSeqFile.length > 0 && this.tagFile.length > 0) {
+      const isScRNASeqFileValid = this.scRNASeqFile.length > 0 && this.scRNASeqFile.every(file => file.name.endsWith('.h5'));
+      const isScATACSeqFileValid = this.scATACSeqFile.length > 0 && this.scATACSeqFile.every(file => file.name.endsWith('.h5ad'));
+      const isTagFileValid = this.tagFile.length > 0 && this.tagFile.every(file => file.name.endsWith('.csv'));
+      if (isScRNASeqFileValid && isScATACSeqFileValid && isTagFileValid) {
+        let taskName = prompt('Please enter the task name:');
+        while (true) {
+          const response = await axios.post('/api/findTaskByTaskName?taskName=' + encodeURIComponent(taskName));
+          if (response.data.code === 1) {
+            break;
+          } else {
+            taskName = prompt('This task name already exists, please enter another name:');
+          }
+        }
         const userId = JSON.parse(sessionStorage.getItem('userData')).userId;
         const response = await axios.post('/api/insertTask', {taskName: "任务一", userId: userId});
         if (response.data.code == 1) {
@@ -125,6 +138,7 @@ export default {
           formData3.append('taskName', '任务一');
           axios.post('/api/uploadOneFile', formData3, {})
 
+          ElMessage.success('task created success.');
         }    
       } else {  
         alert('请选择一个文件后再上传');  
