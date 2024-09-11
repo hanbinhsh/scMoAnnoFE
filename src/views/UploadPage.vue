@@ -70,7 +70,6 @@
       <!-- 按钮行 -->
       <div class="button-row">
         <el-button type="default" class="action-button" @click="open = true" ref="ref3">Tutorial</el-button>
-        <el-button type="primary" class="action-button">Example</el-button>
         <el-button type="warning" class="action-button">Reset</el-button>
         <el-button type="success" class="action-button" id="button-row" @click="UploadFiles()">Upload</el-button>
       </div>
@@ -180,6 +179,10 @@ const file = ref()
 .upload:hover {
   border-color: #409eff;
   background-color: #f0f9ff;
+}
+
+.dark-mode .upload:hover {
+  background-color: #333;
 }
 
 .image-row {
