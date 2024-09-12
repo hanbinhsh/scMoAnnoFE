@@ -4,15 +4,15 @@
     <section class="profile-section">
       <div>
         <!-- 背景图 -->
-        <img src="@/assets/background/1.png" alt="旋转的图片" class="rotating-image"
+        <img src="@/assets/background/1.png" alt="mainpage" class="rotating-image"
           style="z-index: 5; top: 30%; left: 80%;" />
-        <img src="@/assets/background/2.png" alt="旋转的图片" class="rotating-image"
+        <img src="@/assets/background/2.png" alt="mainpage" class="rotating-image"
           style="z-index: 4; top: 30%; left: 80%;" />
-        <img src="@/assets/background/3.png" alt="旋转的图片" class="rotating-image"
+        <img src="@/assets/background/3.png" alt="mainpage" class="rotating-image"
           style="z-index: 1; top: 80%; left: 30%;" />
-        <img src="@/assets/background/4.png" alt="旋转的图片" class="rotating-image"
+        <img src="@/assets/background/4.png" alt="mainpage" class="rotating-image"
           style="z-index: 3; top: 15%; left: 10%;" />
-        <img src="@/assets/background/5.png" alt="旋转的图片" class="rotating-image"
+        <img src="@/assets/background/5.png" alt="mainpage" class="rotating-image"
           style="z-index: 2; top: 15%; left: 10%;" />
       </div>
 
