@@ -4,6 +4,9 @@
     <section class="fullscreen-section">
       <!-- 批量操作按钮 -->
       <div class="batch-actions">
+        <el-button type="success" @click="fetchTaskList">
+          Refresh
+        </el-button>
         <el-button type="danger" @click="showBatchDeleteDialog" :disabled="selectedTasks.length === 0">
           Batch Delete
         </el-button>

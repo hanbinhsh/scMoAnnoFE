@@ -6,24 +6,24 @@
       <el-divider />
       <!-- 批量删除按钮 -->
       <div class="batch-actions">
+        <el-button type="success" @click="fetchUserList">
+          Refresh
+        </el-button>
         <el-button type="danger" @click="showBatchDeleteDialog" :disabled="selectedUsers.length === 0">
           Batch Delete
         </el-button>
       </div>
 
       <!-- 用户列表表格 -->
-      <el-table
-        :data="paginatedUserList"
-        style="width: 100%"
-        @selection-change="handleSelectionChange"
-        @sort-change="handleSortChange"
-      >
+      <el-table :data="paginatedUserList" style="width: 100%" @selection-change="handleSelectionChange"
+        @sort-change="handleSortChange">
         <!-- 多选功能 -->
         <el-table-column type="selection" width="55"></el-table-column>
         <!-- 用户头像列 -->
         <el-table-column label="Avatar" width="80">
           <template #default="{ row }">
-            <el-avatar :size="24" :src="row.avatarBase64 ? 'data:image/jpeg;base64,' + row.avatarBase64 : defaultAvatar"></el-avatar>
+            <el-avatar :size="24"
+              :src="row.avatarBase64 ? 'data:image/jpeg;base64,' + row.avatarBase64 : defaultAvatar"></el-avatar>
           </template>
         </el-table-column>
         <el-table-column prop="userName" label="User Name" sortable></el-table-column>
@@ -48,16 +48,9 @@
       </el-table>
 
       <!-- 分页组件 -->
-      <el-pagination
-        class="pagination"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[5, 10, 20, 50]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="userList.length"
-      >
+      <el-pagination class="pagination" @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="currentPage" :page-sizes="[5, 10, 20, 50]" :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper" :total="userList.length">
       </el-pagination>
     </section>
 
@@ -90,13 +83,8 @@
           <el-input v-model="selectedUser.userName" class="form-input"></el-input>
         </el-form-item>
         <el-form-item label="Password" class="form-item">
-          <el-input
-            v-model="selectedUser.psw"
-            type="password"
-            show-password
-            placeholder="Enter new password"
-            class="form-input"
-          ></el-input>
+          <el-input v-model="selectedUser.psw" type="password" show-password placeholder="Enter new password"
+            class="form-input"></el-input>
         </el-form-item>
         <el-form-item label="Email" class="form-item">
           <el-input v-model="selectedUser.email" class="form-input"></el-input>
@@ -105,12 +93,8 @@
           <el-input v-model="selectedUser.phone" class="form-input"></el-input>
         </el-form-item>
         <el-form-item label="Admin" class="form-item">
-          <el-switch
-            v-model="selectedUser.isAdmin"
-            :active-value="1"
-            :inactive-value="0"
-            :disabled="selectedUser.userId === this.userData.userId"
-          ></el-switch>
+          <el-switch v-model="selectedUser.isAdmin" :active-value="1" :inactive-value="0"
+            :disabled="selectedUser.userId === this.userData.userId"></el-switch>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -212,7 +196,7 @@ export default {
     // 确认编辑操作
     async confirmEdit() {
       try {
-        
+
         const formData = new FormData();
         for (const key in this.selectedUser) {
           formData.append(key, this.selectedUser[key]);

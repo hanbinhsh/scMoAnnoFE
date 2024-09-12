@@ -5,6 +5,9 @@
       <h1 class="page-name">Manage Feedbacks</h1>
       <el-divider />
       <div class="batch-actions">
+        <el-button type="success" @click="fetchFeedbacks">
+          Refresh
+        </el-button>
         <el-button type="danger" @click="showBatchDeleteDialog" :disabled="selectedFeedbacks.length === 0">
           Batch Delete
         </el-button>
@@ -216,14 +219,6 @@ export default {
 </script>
 
 <style scoped>
-.fullscreen-section {
-  display: block;
-  height: 89vh;
-  background-color: #f0f0f0;
-  padding: 30px;
-  margin-top: 60px;
-}
-
 /* 批量操作按钮样式 */
 .batch-actions {
   margin-bottom: 15px;

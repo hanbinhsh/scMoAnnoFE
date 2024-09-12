@@ -6,6 +6,9 @@
       <el-divider />
       <!-- 批量操作按钮 -->
       <div class="batch-actions">
+        <el-button type="success" @click="fetchTaskList">
+          Refresh
+        </el-button>
         <el-button type="primary" @click="showBatchEditDialog" :disabled="selectedTasks.length === 0">
           Batch Edit
         </el-button>
