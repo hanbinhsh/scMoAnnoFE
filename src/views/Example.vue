@@ -1,25 +1,43 @@
 <template>
-  <div class="main-page">
+  <el-container class="main-page">
     <MainHeader></MainHeader>
-    <section class="fullscreen-section">
-      <div class="chart-container">
-        <div id="main" class="chart"></div>
-        <div class="table-container">
-          <el-table :data="paginatedData" stripe style="width: 100%;" @sort-change="handleSortChange">
-            <el-table-column prop="index" label="ID" width="70" sortable></el-table-column>
-            <el-table-column prop="coord" label="Position" sortable>
-              <template #default="{ row }">
-                {{ `(${row.coord[0]}, ${row.coord[1]})` }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="label" label="Label" sortable></el-table-column>
-          </el-table>
-          <el-pagination background layout="prev, pager, next" :total="totalItems" :page-size="pageSize"
-            :current-page="currentPage" @current-change="handlePageChange" class="page-control"></el-pagination>
-        </div>
-      </div>
-    </section>
-  </div>
+    <el-main class="fullscreen-section">
+      <el-row type="flex" justify="center">
+        <el-col :span="20">
+          <el-card shadow="always">
+            <template #header>
+              <div slot="header" class="card-header">
+                <span>Data Visualization</span>
+              </div>
+            </template>
+            <div class="card-body">
+              <el-row type="flex" justify="space-between">
+                <!-- 图表容器 -->
+                <el-col :span="11">
+                  <div id="main" class="chart"></div>
+                </el-col>
+                <!-- 表格和分页容器 -->
+                <el-col :span="12">
+                  <el-table :data="paginatedData" stripe style="width: 100%;" @sort-change="handleSortChange">
+                    <el-table-column prop="index" label="ID" width="70" sortable></el-table-column>
+                    <el-table-column prop="coord" label="Position" sortable>
+                      <template #default="{ row }">
+                        {{ `(${row.coord[0]}, ${row.coord[1]})` }}
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="label" label="Label" width="70" sortable></el-table-column>
+                  </el-table>
+                  <el-pagination background layout="prev, pager, next" :total="totalItems" :page-size="pageSize"
+                    :current-page="currentPage" @current-change="handlePageChange" class="page-control">
+                  </el-pagination>
+                </el-col>
+              </el-row>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
@@ -46,11 +64,11 @@ export default {
         coord,
         label: labels[index] || 'N/A',
       })),
-      pageSize: 18,
+      pageSize: 15,
       currentPage: 1,
-      sortProp: '',  // 当前排序的属性
-      sortOrder: '', // 当前排序的顺序
-      paginatedData: [], // 存储分页数据
+      sortProp: '',
+      sortOrder: '',
+      paginatedData: [],
     };
   },
   computed: {
@@ -59,7 +77,6 @@ export default {
     },
   },
   watch: {
-    // Watch for changes in page size, current page, sorting property, or sorting order
     pageSize() {
       this.updatePaginatedData();
     },
@@ -82,12 +99,10 @@ export default {
       this.sortOrder = order;
     },
     applySorting() {
-      // Only sort if a sort property and order are defined
       if (this.sortProp && this.sortOrder) {
         this.tableData.sort((a, b) => {
           const valueA = a[this.sortProp];
           const valueB = b[this.sortProp];
-
           if (this.sortOrder === 'ascending') {
             return valueA > valueB ? 1 : -1;
           } else if (this.sortOrder === 'descending') {
@@ -97,7 +112,6 @@ export default {
           }
         });
       }
-      // After sorting, update paginated data
       this.updatePaginatedData();
     },
     updatePaginatedData() {
@@ -107,37 +121,33 @@ export default {
     },
   },
   mounted() {
-    this.applySorting(); // Initial sorting
-    this.updatePaginatedData(); // Initial pagination
+    this.applySorting();
+    this.updatePaginatedData();
     initializeChart();
   },
 };
 </script>
 
 <style scoped>
-.fullscreen-section {
-  padding-left: 150px;
-  padding-right: 150px;
+.card-header {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
 }
 
-.chart-container {
-  display: flex;
-  align-items: flex-start;
+.dark-mode .card-header{
+  color: #EEE;
+}
+
+.card-body {
+  padding: 20px;
 }
 
 .chart {
-  width: 800px;
-  height: 800px;
+  width: 700px;
+  height: 700px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.table-container {
-  margin-left: 20px;
-  flex: 1;
-  width: 800px;
-  height: 800px;
-  position: relative;
 }
 
 .el-table {
@@ -154,8 +164,6 @@ export default {
 .page-control {
   bottom: 0;
   right: 0;
-  position: absolute;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 </style>
