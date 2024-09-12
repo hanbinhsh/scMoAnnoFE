@@ -19,7 +19,7 @@
             Drop file here or <em>click to upload</em>
           </div>
           <template #tip>
-            <div class="el-upload__tip">upload scRNA-seq file</div>
+            <div class="el-upload__tip">upload scRNA-seq file (.h5/.h5ad/.npy)</div>
           </template>
         </el-upload>
 
@@ -38,7 +38,7 @@
             Drop file here or <em>click to upload</em>
           </div>
           <template #tip>
-            <div class="el-upload__tip">upload scATAC-seq file</div>
+            <div class="el-upload__tip">upload scATAC-seq file (.h5/.h5ad/.npy)</div>
           </template>
         </el-upload>
 
@@ -57,7 +57,7 @@
             Drop file here or <em>click to upload</em>
           </div>
           <template #tip>
-            <div class="el-upload__tip">upload Tag file</div>
+            <div class="el-upload__tip">upload Tag file (.csv/.npy)</div>
           </template>
         </el-upload>
       </div>
