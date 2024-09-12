@@ -10,6 +10,9 @@
         <el-button type="danger" @click="showBatchDeleteDialog" :disabled="selectedTasks.length === 0">
           Batch Delete
         </el-button>
+        <el-button type="success" @click="showBatchDownloadDialog" :disabled="selectedTasks.length === 0">
+          Batch Download
+        </el-button>
       </div>
 
       <!-- 任务列表表格 -->
@@ -33,8 +36,11 @@
             <el-tag :type="statusType(row.status)">{{ statusText(row.status) }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="Operations" width="150">
+        <el-table-column fixed="right" label="Operations" width="200">
           <template #default="{ row }">
+            <el-button link type="success" size="small" @click="showDownloadFileDialog(row)">
+              Download
+            </el-button>
             <el-button link type="primary" size="small" @click="showDetailDialog(row)">
               Detail
             </el-button>
@@ -52,6 +58,30 @@
 
     </section>
   </div>
+
+  <!-- 批量下载确认对话框 -->
+  <el-dialog v-model="batchDownloadDialogVisible" title="Prompt" width="500">
+      <span>The selected tasks will be downloaded. Are you sure?</span>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="batchDownloadDialogVisible = false">Cancel</el-button>
+          <el-button type="success" @click="confirmBatchDownload">Confirm</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+    <!-- 单个下载确认对话框 -->
+  <el-dialog v-model="downloadDialogVisible" title="Prompt" width="500" align-center>
+    <span>Task <strong style="color: #e74c3c;">{{ selectedTask.taskName }}</strong> will be downloaded</span>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="downloadDialogVisible = false">Cancel</el-button>
+        <el-button type="success" @click="downloadDialogVisible = false; download()">
+          Confirm
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 
   <!-- 批量删除确认对话框 -->
   <el-dialog v-model="batchDeleteDialogVisible" title="Warning" width="500">
@@ -106,6 +136,8 @@ export default {
       deleteDialogVisible: false,
       batchDeleteDialogVisible: false,
       detailDialogVisible: false,
+      batchDownloadDialogVisible: false,
+      downloadDialogVisible: false,
       selectedTask: null,
       selectedTasks: [], // 存储多选选中的任务
       currentPage: 1, // 当前页
@@ -115,6 +147,14 @@ export default {
     };
   },
   methods: {
+    showDownloadFileDialog(task) {
+      this.downloadDialogVisible = true;
+      this.selectedTask = task;
+    },
+    showBatchDownloadDialog(task) {
+      this.batchDownloadDialogVisible = true;
+      this.selectedTask = task;
+    },
     showDeleteDialog(task) {
       this.deleteDialogVisible = true;
       this.selectedTask = task;
@@ -129,6 +169,9 @@ export default {
         return;
       }
       this.batchDeleteDialogVisible = true;
+    },
+    async download() {
+
     },
     async deleteTask() {
       try {
