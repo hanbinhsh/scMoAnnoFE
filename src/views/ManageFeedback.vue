@@ -5,12 +5,12 @@
       <h1 class="page-name">Manage Feedbacks</h1>
       <el-divider />
       <div class="batch-actions">
-        <el-button type="danger" @click="showBatchDeleteDialog" :disabled="selectedFeedback.length === 0">
+        <el-button type="danger" @click="showBatchDeleteDialog" :disabled="selectedFeedbacks.length === 0">
           Batch Delete
         </el-button>
       </div>
       <el-table 
-        :data="feedbackList" 
+        :data="paginatedFeedbackList" 
         style="width: 100%"
         @selection-change="handleSelectionChange"
         @sort-change="handleSortChange"
@@ -27,7 +27,7 @@
         <el-table-column prop="email" label="User Email" sortable></el-table-column>
         <el-table-column prop="phone" label="User Phone" sortable></el-table-column>
         <el-table-column prop="subject" label="Subject" sortable></el-table-column>
-        <el-table-column prop="created_time" label="Create Time" width="180">
+        <el-table-column prop="created_time" label="Create Time" width="180" sortable>
           <template #default="{ row }">
             {{ formatDate(row.created_time) }}
           </template>
@@ -41,7 +41,13 @@
           </template>
         </el-table-column>
       </el-table>
+      
+      <!-- 分页组件 -->
+      <el-pagination class="pagination" @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="currentPage" :page-sizes="[5, 10, 20, 50]" :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper" :total="feedbackList.length"></el-pagination>
     </section>
+
     <!-- 删除确认对话框 -->
     <el-dialog v-model="deleteDialogVisible" title="Warning" width="500" align-center>
       <span>Feedback <strong style="color: #e74c3c;">{{ selectedFeedback.subject }}</strong> will be deleted</span>
@@ -81,8 +87,7 @@
 </template>
 
 <script>
-import MainHeader from "../components/MainHeader.vue"
-import { ref } from 'vue';
+import MainHeader from "../components/MainHeader.vue";
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 
@@ -94,10 +99,16 @@ export default {
   data() {
     return {
       feedbackList: [],
+      paginatedFeedbackList: [], // 当前页的反馈数据
       deleteDialogVisible: false,
       batchDeleteDialogVisible: false,
       messageDialogVisible: false,
-      selectedFeedback: [],
+      selectedFeedback: {},
+      selectedFeedbacks: [],
+      currentPage: 1,
+      pageSize: 10,
+      sortProp: '',
+      sortOrder: '',
     };
   },
   methods: {
@@ -112,16 +123,43 @@ export default {
       this.messageDialogVisible = true;
       this.selectedFeedback = feedback;
     },
-    showMessageDialog(feedback) {
-      this.messageDialogVisible = true;
-      this.selectedFeedback = feedback;
-    },
     handleSelectionChange(val) {
-      this.selectedFeedback = val;
+      this.selectedFeedbacks = val;
+    },
+    handleSortChange({ prop, order }) {
+      this.sortProp = prop;
+      this.sortOrder = order;
+      this.applySorting();
+    },
+    applySorting() {
+      if (this.sortProp && this.sortOrder) {
+        this.feedbackList.sort((a, b) => {
+          const valueA = a[this.sortProp];
+          const valueB = b[this.sortProp];
+
+          if (this.sortOrder === 'ascending') {
+            return valueA > valueB ? 1 : -1;
+          } else if (this.sortOrder === 'descending') {
+            return valueA < valueB ? 1 : -1;
+          } else {
+            return 0;
+          }
+        });
+      }
+      this.updatePaginatedFeedbackList();
+    },
+    updatePaginatedFeedbackList() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = start + this.pageSize;
+      this.paginatedFeedbackList = this.feedbackList.slice(start, end);
+    },
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.updatePaginatedFeedbackList();
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-      this.updatePaginatedTaskList();
+      this.updatePaginatedFeedbackList();
     },
     async fetchFeedbacks() {
       try {
@@ -129,8 +167,7 @@ export default {
         if (response.data.code === 200) {
           const dataObject = response.data.data;
           this.feedbackList = Object.values(dataObject);
-          // this.applySorting();
-          // feedbackList.value = response.data.feedbacks;
+          this.applySorting();
         } else {
           console.error('Failed to fetch feedbacks:', response.data.msg);
         }
@@ -139,11 +176,9 @@ export default {
       }
     },
     async deleteFeedback(feedbackId) {
-      // console.log(feedbackId)
       try {
         const response = await axios.delete(`/api/deleteFeedback/${feedbackId}`);
         if (response.data.code === 1) {
-          // 从列表中移除被删除的反馈
           ElMessage.success('Feedback deleted successfully');
           this.fetchFeedbacks();
         } else {
@@ -163,7 +198,7 @@ export default {
     },
     async confirmBatchDelete() {
       this.batchDeleteDialogVisible = false;
-      for (const feedback of this.selectedFeedback) {
+      for (const feedback of this.selectedFeedbacks) {
         await this.deleteFeedbackID(feedback.feedback_id);
       }
       ElMessage.success('Batch delete success.');
@@ -179,3 +214,25 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.fullscreen-section {
+  display: block;
+  height: 89vh;
+  background-color: #f0f0f0;
+  padding: 30px;
+  margin-top: 60px;
+}
+
+/* 批量操作按钮样式 */
+.batch-actions {
+  margin-bottom: 15px;
+}
+
+/* 分页组件样式 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+</style>

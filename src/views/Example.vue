@@ -50,17 +50,28 @@ export default {
       currentPage: 1,
       sortProp: '',  // 当前排序的属性
       sortOrder: '', // 当前排序的顺序
+      paginatedData: [], // 存储分页数据
     };
   },
   computed: {
     totalItems() {
       return this.tableData.length;
     },
-    paginatedData() {
-      const start = (this.currentPage - 1) * this.pageSize;
-      const end = start + this.pageSize;
-      return this.tableData.slice(start, end);
+  },
+  watch: {
+    // Watch for changes in page size, current page, sorting property, or sorting order
+    pageSize() {
+      this.updatePaginatedData();
     },
+    currentPage() {
+      this.updatePaginatedData();
+    },
+    sortProp() {
+      this.applySorting();
+    },
+    sortOrder() {
+      this.applySorting();
+    }
   },
   methods: {
     handlePageChange(page) {
@@ -69,9 +80,9 @@ export default {
     handleSortChange({ prop, order }) {
       this.sortProp = prop;
       this.sortOrder = order;
-      this.applySorting(); // 进行排序
     },
     applySorting() {
+      // Only sort if a sort property and order are defined
       if (this.sortProp && this.sortOrder) {
         this.tableData.sort((a, b) => {
           const valueA = a[this.sortProp];
@@ -86,6 +97,7 @@ export default {
           }
         });
       }
+      // After sorting, update paginated data
       this.updatePaginatedData();
     },
     updatePaginatedData() {
@@ -95,6 +107,8 @@ export default {
     },
   },
   mounted() {
+    this.applySorting(); // Initial sorting
+    this.updatePaginatedData(); // Initial pagination
     initializeChart();
   },
 };
