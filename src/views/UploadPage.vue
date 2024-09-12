@@ -4,8 +4,7 @@
     <section class="upload-section">
       <div class="upload-row" id="upload-row">
         <!-- 文件上传组件 -->
-        <el-upload v-model:file-list="scRNASeqFile" class="upload" drag action="" :limit="1" :on-exceed="handleExceed"
-          :auto-upload="false">
+        <el-upload v-model:file-list="scRNASeqFile" class="upload" drag action="" :limit="1" :auto-upload="false">
           <el-icon class="el-icon--upload">
             <UploadFilled />
           </el-icon>
@@ -17,8 +16,7 @@
           </template>
         </el-upload>
 
-        <el-upload v-model:file-list="scATACSeqFile" class="upload" drag action="" :limit="1" :on-exceed="handleExceed"
-          :auto-upload="false">
+        <el-upload v-model:file-list="scATACSeqFile" class="upload" drag action="" :limit="1" :auto-upload="false">
           <el-icon class="el-icon--upload">
             <UploadFilled />
           </el-icon>
@@ -30,8 +28,7 @@
           </template>
         </el-upload>
 
-        <el-upload v-model:file-list="tagFile" class="upload" drag action="" :limit="1" :on-exceed="handleExceed"
-          :auto-upload="false">
+        <el-upload v-model:file-list="tagFile" class="upload" drag action="" :limit="1" :auto-upload="false">
           <el-icon class="el-icon--upload">
             <UploadFilled />
           </el-icon>
@@ -52,7 +49,7 @@
       <!-- 按钮行 -->
       <div class="button-row">
         <el-button type="default" class="action-button" @click="open = true" ref="ref3">Tutorial</el-button>
-        <el-button type="warning" class="action-button">Reset</el-button>
+        <el-button type="warning" class="action-button" @click="handleResetClick">Reset</el-button>
         <el-button type="success" class="action-button" id="button-row" @click="handleUploadClick">Upload</el-button>
       </div>
     </section>
@@ -101,6 +98,12 @@ export default {
     };
   },
   methods: {
+    handleResetClick() {
+      this.tagFile = [];
+      this.scATACSeqFile = [];
+      this.scRNASeqFile = [];
+      ElMessage.success('Reset success.');
+    },
     handleUploadClick() {
       // 检查文件是否为空或类型不正确
       const isScRNASeqFileValid = this.scRNASeqFile.length > 0 && this.scRNASeqFile.every(file => file.name.endsWith('.h5') || file.name.endsWith('.h5ad') || file.name.endsWith('.npy'));
@@ -140,33 +143,35 @@ export default {
     },
     async UploadFiles() {
       const userId = JSON.parse(sessionStorage.getItem('userData')).userId;
-      const response = await axios.post('/api/insertTask', { taskName: this.taskName, userId: userId });
-      if (response.data.code == 1) {
-        axios.post('/api/insertFile', { taskName: this.taskName });
+      const response = await axios.post('/api/insertTask', { taskName: this.taskName, userId });
 
-        const formData = new FormData();
-        formData.append('file', this.scRNASeqFile[0].raw);
-        formData.append('taskName', this.taskName);
-        formData.append('fileType', 'scRNASeqFile');
-        axios.post('/api/uploadOneFile', formData, {});
+      if (response.data.code === 1) {
+        await axios.post('/api/insertFile', { taskName: this.taskName });
 
-        const formData2 = new FormData();
-        formData2.append('file', this.scATACSeqFile[0].raw);
-        formData2.append('taskName', this.taskName);
-        formData2.append('fileType', 'scATACSeqFile');
-        axios.post('/api/uploadOneFile', formData2, {});
+        const files = [
+          { file: this.scRNASeqFile[0].raw, fileType: 'scRNASeqFile' },
+          { file: this.scATACSeqFile[0].raw, fileType: 'scATACSeqFile' },
+          { file: this.tagFile[0].raw, fileType: 'tagFile' }
+        ];
 
-        const formData3 = new FormData();
-        formData3.append('file', this.tagFile[0].raw);
-        formData3.append('taskName', this.taskName);
-        formData3.append('fileType', 'tagFile');
-        axios.post('/api/uploadOneFile', formData3, {});
+        const uploadPromises = files.map(({ file, fileType }) => {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('taskName', this.taskName);
+          formData.append('fileType', fileType);
+          return axios.post('/api/uploadOneFile', formData);
+        });
+
+        await Promise.all(uploadPromises);
 
         ElMessage.success('Task created successfully.');
-        this.tagFile = []; this.scATACSeqFile = []; this.scRNASeqFile = [];
+        this.tagFile = [];
+        this.scATACSeqFile = [];
+        this.scRNASeqFile = [];
         this.showTaskNameDialog = false; // 成功上传后关闭对话框
       }
     },
+
   },
 };
 </script>
