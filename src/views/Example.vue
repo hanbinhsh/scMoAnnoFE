@@ -5,7 +5,7 @@
       <div class="chart-container">
         <div id="main" class="chart"></div>
         <div class="table-container">
-          <el-table :data="paginatedData" stripe style="width: 100%;">
+          <el-table :data="paginatedData" stripe style="width: 100%;" @sort-change="handleSortChange">
             <el-table-column prop="index" label="ID" width="70" sortable></el-table-column>
             <el-table-column prop="coord" label="Position" sortable>
               <template #default="{ row }">
@@ -48,6 +48,8 @@ export default {
       })),
       pageSize: 18,
       currentPage: 1,
+      sortProp: '',  // 当前排序的属性
+      sortOrder: '', // 当前排序的顺序
     };
   },
   computed: {
@@ -63,6 +65,33 @@ export default {
   methods: {
     handlePageChange(page) {
       this.currentPage = page;
+    },
+    handleSortChange({ prop, order }) {
+      this.sortProp = prop;
+      this.sortOrder = order;
+      this.applySorting(); // 进行排序
+    },
+    applySorting() {
+      if (this.sortProp && this.sortOrder) {
+        this.tableData.sort((a, b) => {
+          const valueA = a[this.sortProp];
+          const valueB = b[this.sortProp];
+
+          if (this.sortOrder === 'ascending') {
+            return valueA > valueB ? 1 : -1;
+          } else if (this.sortOrder === 'descending') {
+            return valueA < valueB ? 1 : -1;
+          } else {
+            return 0;
+          }
+        });
+      }
+      this.updatePaginatedData();
+    },
+    updatePaginatedData() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = start + this.pageSize;
+      this.paginatedData = this.tableData.slice(start, end);
     },
   },
   mounted() {
@@ -108,7 +137,7 @@ export default {
   text-align: right;
 }
 
-.page-control{
+.page-control {
   bottom: 0;
   right: 0;
   position: absolute;

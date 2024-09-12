@@ -27,7 +27,7 @@
         <el-button type="primary" class="submit-button" @click="onShow">Sign in to
           scMoAnno</el-button>
         <Vcode :show="isShow" @success="onSuccess" @close="onClose" slider-text="Slide to complete the puzzle"
-          success-text="Verification successful!" />
+          success-text="Verification successful!" fail-text="Verification Failed!"/>
         <div class="backHome">
           <a href="/HomeView">Home</a>
         </div>

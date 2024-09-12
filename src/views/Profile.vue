@@ -163,9 +163,13 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 60px);
+  height: 100vh;
   background-color: #f9f9f9;
   padding: 20px;
+}
+
+.dark-mode .profile-section {
+  background-color: #2c2c2c;
 }
 
 .user-card {

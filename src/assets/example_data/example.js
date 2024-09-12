@@ -28,7 +28,18 @@ export function initializeChart() {
       }
     ],
     tooltip: {
-      position: 'top'
+      position: 'top',
+      formatter: function (params) {
+        // 获取点的坐标信息和类别索引
+        const x = params.value[0];
+        const y = params.value[1];
+        const clusterIndex = params.value[DIENSIION_CLUSTER_INDEX];
+
+        // 查找类别标签
+        const clusterLabel = pieces.find(piece => piece.value === clusterIndex)?.label || `Cluster ${clusterIndex}`;
+
+        return `X: ${x}<br>Y: ${y}<br>Cluster: ${clusterLabel}`;
+      }
     },
     visualMap: {
       type: 'piecewise',
@@ -47,7 +58,7 @@ export function initializeChart() {
     yAxis: {},
     series: {
       type: 'scatter',
-      encode: { tooltip: [0, 1] },
+      encode: { tooltip: [0, 1, DIENSIION_CLUSTER_INDEX] }, // 使用第 0, 1 和 2 维度来显示信息
       symbolSize: 5,
       itemStyle: {
         borderColor: '#555'
