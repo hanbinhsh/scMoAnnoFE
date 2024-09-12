@@ -97,7 +97,7 @@
       <section class="intro-section">
         <div class="intro-container">
           <div class="intro-text">
-            <h1>The workflow diagram of the single-cell multi-omics cell type annotation algorithm, scMoAnno.</h1>
+            <h1>The workflow diagram of the single-cell multi-omics cell type annotation algorithm, scMoAnno</h1>
             The scMoAnno model undergoes two rounds of supervised learning. In the first round, a pre-trained fusion
             feature extractor is utilized to perform
             cross-attention feature extraction on scRNA-seq and scATAC-seq data, encoding the interaction features of
