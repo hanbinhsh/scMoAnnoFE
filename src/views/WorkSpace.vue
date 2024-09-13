@@ -82,6 +82,7 @@
     <span>{{ selectedTask.details }}</span>
     <template #footer>
       <div class="dialog-footer">
+        <el-button type="primary" @click="showCharts( selectedTask.taskName )">Show charts</el-button>
         <el-button type="primary" @click="detailDialogVisible = false">Confirm</el-button>
       </div>
     </template>
@@ -118,6 +119,10 @@ export default {
     showDeleteDialog(task) {
       this.deleteDialogVisible = true;
       this.selectedTask = task;
+    },
+    showCharts(taskName) {
+      console.log(taskName);
+      this.$router.push({ name: "Example", params: { taskName } });
     },
     showDetailDialog(task) {
       this.detailDialogVisible = true;

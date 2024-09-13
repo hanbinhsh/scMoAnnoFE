@@ -69,6 +69,7 @@ export default {
       sortProp: '',
       sortOrder: '',
       paginatedData: [],
+      taskName: this.$route.params.taskName,
     };
   },
   computed: {
