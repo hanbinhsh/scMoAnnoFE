@@ -343,7 +343,6 @@ export default {
       for (const task of this.selectedTasks) {
         await this.downloadByTaskName(task.task_name);
       }
-      ElMessage.success('Batch download success.');
       this.fetchTaskList();
     },
     async downloadByTaskName(taskName) {
