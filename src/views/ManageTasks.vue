@@ -15,6 +15,9 @@
         <el-button type="danger" @click="showBatchDeleteDialog" :disabled="selectedTasks.length === 0">
           Batch Delete
         </el-button>
+        <el-button type="success" @click="showBatchDownloadDialog" :disabled="selectedTasks.length === 0">
+          Batch Download
+        </el-button>
       </div>
 
       <!-- 任务列表表格 -->
@@ -62,8 +65,11 @@
         </el-table-column>
         
         <!-- 显示操作列 -->
-        <el-table-column fixed="right" label="Operations" width="180">
+        <el-table-column fixed="right" label="Operations" width="240">
           <template #default="{ row }">
+            <el-button link type="success" size="small" @click="showDownloadFileDialog(row)">
+              Download
+            </el-button>
             <el-button link type="primary" size="small" @click="showDetailDialog(row)">
               Detail
             </el-button>
@@ -90,6 +96,30 @@
       >
       </el-pagination>
     </section>
+
+    <!-- 批量下载确认对话框 -->
+  <el-dialog v-model="batchDownloadDialogVisible" title="Prompt" width="500">
+      <span>The selected tasks will be downloaded. Are you sure?</span>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="batchDownloadDialogVisible = false">Cancel</el-button>
+          <el-button type="success" @click="confirmBatchDownload">Confirm</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+    <!-- 单个下载确认对话框 -->
+  <el-dialog v-model="downloadDialogVisible" title="Prompt" width="500" align-center>
+    <span>Task <strong style="color: #e74c3c;">{{ selectedTask.task_name }}</strong> will be downloaded</span>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="downloadDialogVisible = false">Cancel</el-button>
+        <el-button type="success" @click="downloadDialogVisible = false; download()">
+          Confirm
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 
     <!-- 批量删除确认对话框 -->
     <el-dialog v-model="batchDeleteDialogVisible" title="Batch Delete Confirmation" width="500" align-center>
@@ -197,6 +227,8 @@ export default {
       editDialogVisible: false,
       batchDeleteDialogVisible: false,
       batchEditDialogVisible: false,
+      batchDownloadDialogVisible: false,
+      downloadDialogVisible: false,
       selectedTask: null,
       batchEditData: { status: null },
       currentPage: 1,
@@ -207,6 +239,14 @@ export default {
     };
   },
   methods: {
+    showDownloadFileDialog(task) {
+      this.downloadDialogVisible = true;
+      this.selectedTask = task;
+    },
+    showBatchDownloadDialog(task) {
+      this.batchDownloadDialogVisible = true;
+      this.selectedTask = task;
+    },
     showDeleteDialog(task) {
       this.deleteDialogVisible = true;
       this.selectedTask = task;
@@ -248,6 +288,29 @@ export default {
         this.fetchTaskList();
       } catch (error) {
         console.error("Delete failed:", error);
+      }
+    },
+    async download() {
+      try {
+        fetch("/api/download?taskName=" + this.selectedTask.task_name)
+          .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.blob(); // 获取文件内容作为Blob对象
+          })
+          .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', this.selectedTask.task_name+".zip"); // or any other extension
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+          })
+      } catch (error) {
+        console.error("Download failed:", error);
       }
     },
     handleSortChange({ prop, order }) {

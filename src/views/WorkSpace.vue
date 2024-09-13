@@ -33,7 +33,7 @@
             <el-tag :type="statusType(row.status)">{{ statusText(row.status) }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="Operations" width="150">
+        <el-table-column fixed="right" label="Operations" width="200">
           <template #default="{ row }">
             <el-button link type="primary" size="small" @click="showDetailDialog(row)">
               Detail
