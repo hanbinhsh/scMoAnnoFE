@@ -338,6 +338,37 @@ export default {
       this.taskList = sortedList;
       this.updatePaginatedTaskList();
     },
+    async confirmBatchDownload() {
+      this.batchDownloadDialogVisible = false;
+      for (const task of this.selectedTasks) {
+        await this.downloadByTaskName(task.task_name);
+      }
+      ElMessage.success('Batch download success.');
+      this.fetchTaskList();
+    },
+    async downloadByTaskName(taskName) {
+      try {
+        fetch("/api/download?taskName=" + taskName)
+          .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.blob(); // 获取文件内容作为Blob对象
+          })
+          .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', taskName+".zip"); // or any other extension
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+          })
+      } catch (error) {
+        console.error("Download failed:", error);
+      }
+    },
     async confirmBatchDelete() {
       this.batchDeleteDialogVisible = false;
       for (const task of this.selectedTasks) {
