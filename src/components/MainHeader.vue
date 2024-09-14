@@ -71,6 +71,7 @@ const isDark = useDark();
 const toggleDark = useToggle(isDark);
 const isDarkTag = ref(false);
 const toggleTheme = (event) => {
+  
   const x = event.clientX;
   const y = event.clientY;
   const endRadius = Math.hypot(
@@ -83,13 +84,7 @@ const toggleTheme = (event) => {
     toggleDark()
     return
   }
-  const transition = document.startViewTransition(() => {
-    const root = document.documentElement;
-    isDarkTag.value = root.classList.contains('dark');
-    isDark.value = !isDarkTag.value;
-    root.classList.remove(isDarkTag.value ? 'dark' : 'light');
-    root.classList.add(isDarkTag.value ? 'light' : 'dark');
-  })
+  const transition = document.startViewTransition(() => {})
 
   transition.ready.then(() => {
     const clipPath = [
@@ -143,13 +138,16 @@ export default {
             // 将黑暗模式状态保存到本地存储
             localStorage.setItem('isDarkMode', newVal);
             document.body.classList.toggle('dark-mode', newVal); // 切换 body 的黑暗模式类
+            document.documentElement.classList.toggle('dark', newVal);
         },
     },
     mounted() {
+        document.documentElement.classList.remove('dark');
         this.activeIndex = this.$route.name;
         this.isDarkMode = JSON.parse(localStorage.getItem('isDarkMode')) || false;
         if (this.isDarkMode) {
             document.body.classList.toggle('dark-mode', this.isDarkMode);
+            document.documentElement.classList.add('dark');
         }
     },
 };
