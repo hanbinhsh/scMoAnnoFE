@@ -165,6 +165,6 @@ export default {
 .page-control {
   bottom: 0;
   right: 0;
-  position: relative;
+  position: absolute;
 }
 </style>
