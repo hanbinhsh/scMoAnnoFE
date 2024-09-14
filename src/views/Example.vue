@@ -8,6 +8,7 @@
             <template #header>
               <div slot="header" class="card-header">
                 <span>Data Visualization</span>
+                <el-button type="primary" style="float: right;" @click="download()">Download</el-button>
               </div>
             </template>
             <div class="card-body">
@@ -121,6 +122,10 @@ export default {
       const end = start + this.pageSize;
       this.paginatedData = this.tableData.slice(start, end);
     },
+    // TODO 仅仅在result页面可用
+    download(){
+
+    }
   },
   mounted() {
     this.applySorting();
