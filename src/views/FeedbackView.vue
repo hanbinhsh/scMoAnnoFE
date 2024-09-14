@@ -56,7 +56,10 @@ export default {
     async submitForm() {
       // 这里可以添加发送表单数据的逻辑
       console.log('Feedback submitted:', this.feedbackForm);
-      console.log(this.userData)
+      if (this.feedbackForm.subject === '' || this.feedbackForm.message === '') {
+        ElMessage.error('Please fill in all the fields');
+        return;
+      }
       this.feedbackForm.userId = this.userData.userId;
       try {
         await axios.post("/api/feedback", this.feedbackForm)
