@@ -70,6 +70,7 @@ export default {
       sortOrder: '',
       paginatedData: [],
       taskName: this.$route.params.taskName,
+      isDarkMode:false,
     };
   },
   computed: {
@@ -124,7 +125,9 @@ export default {
   mounted() {
     this.applySorting();
     this.updatePaginatedData();
-    initializeChart();
+    this.isDarkMode = JSON.parse(localStorage.getItem('isDarkMode')) || false;
+    // BUG
+    initializeChart(false);
   },
 };
 </script>
@@ -136,7 +139,7 @@ export default {
   color: #333;
 }
 
-.dark-mode .card-header{
+.dark-mode .card-header {
   color: #EEE;
 }
 

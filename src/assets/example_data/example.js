@@ -3,7 +3,7 @@ import * as ecStat from 'echarts-stat'; // 导入 echarts-stat 库
 import { data } from './data.js'; // 导入数据
 import { pieces } from './config.js'; // 导入配置
 
-export function initializeChart() {
+export function initializeChart(dark) {
   // 注册聚类算法
   echarts.registerTransform(ecStat.transform.clustering);
 
@@ -69,6 +69,11 @@ export function initializeChart() {
 
   // 初始化图表
   const chartDom = document.getElementById('main');
-  const myChart = echarts.init(chartDom);
-  myChart.setOption(option);
+  if(dark){
+    const myChart = echarts.init(chartDom, 'dark');
+    myChart.setOption(option);
+  }else{
+    const myChart = echarts.init(chartDom);
+    myChart.setOption(option);
+  }
 }
