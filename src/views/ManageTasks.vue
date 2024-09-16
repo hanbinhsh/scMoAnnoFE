@@ -203,20 +203,10 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog v-model="uploadDialogVisible" title="Upload Required Files" width="500" align-center>
+    <el-dialog v-model="uploadDialogVisible" title="Upload Required Files" width="500" align-center @close="closeUploadDialog">
     <el-form>
       <!-- 文件上传组件 -->
-      <el-upload v-model:file-list="configjsFile" class="upload" drag action="" :limit="1" :auto-upload="false">
-          <el-icon class="el-icon--upload">
-            <UploadFilled />
-          </el-icon>
-          <div class="el-upload__text">
-            Drop file here or <em>click to upload</em>
-          </div>
-          <template #tip>
-            <div class="el-upload__tip">upload config.js file</div>
-          </template>
-        </el-upload>
+
 
         <el-upload v-model:file-list="datajsFile" class="upload" drag action="" :limit="1" :auto-upload="false">
           <el-icon class="el-icon--upload">
@@ -244,7 +234,7 @@
     </el-form>
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="uploadDialogVisible = false">Cancel</el-button>
+        <el-button @click="closeUploadDialog">Cancel</el-button>
         <el-button type="warning" class="action-button" @click="handleResetClick">Reset</el-button>
         <el-button type="primary" @click="confirmUpload" :disabled="!canUpload">Confirm</el-button>
       </div>
@@ -266,8 +256,8 @@ export default {
   },
   data() {
     return {
+      
       uploadDialogVisible: false, // 新增状态，用于控制文件上传对话框的显示
-      configjsFile:[],
       datajsFile: [],
       lablejsFile: [],
       canUpload: true, // 新增状态，用于判断是否可以确认上传
@@ -291,22 +281,25 @@ export default {
     };
   },
   methods: {
+    closeUploadDialog() {
+      this.uploadDialogVisible = false;
+      // 当对话框关闭时，将状态设置为 "Processing"
+      this.selectedTask.status = 1; // 1 对应 "Processing"
+    },
     handleResetClick() {
-      this.configjsFile = [];
       this.datajsFile = [];
       this.lablejsFile = [];
       ElMessage.success('Reset success.');
     },
     handleUploadClick() {
       // 检查文件是否为空或类型不正确
-      const isConfigjsFileValid = this.configjsFile.length > 0 && this.configjsFile.every(file => file.name.endsWith('.js') );
       const isDatajsFileValid = this.datajsFile.length > 0 && this.datajsFile.every(file => file.name.endsWith('.js'));
       const isLablejsFileValid = this.lablejsFile.length > 0 && this.lablejsFile.every(file => file.name.endsWith('.js'));
-      if (this.configjsFile.length === 0 || this.datajsFile.length === 0 || this.lablejsFile.length === 0) {
+      if ( this.datajsFile.length === 0 || this.lablejsFile.length === 0) {
         ElMessage.error('Please upload all required files.');
         return;
       }
-      if (!isConfigjsFileValid || !isDatajsFileValid || !isLablejsFileValid) {
+      if ( !isDatajsFileValid || !isLablejsFileValid) {
         ElMessage.error('Incorrect file type. Please upload the correct file types.');
         return;
       }
@@ -318,6 +311,7 @@ export default {
       if (value === 2) { // 当选择Completed状态时
         this.uploadDialogVisible = true; // 显示文件上传对话框
       }
+      this.value=1;
     },
     handleUploadSuccess(response, file, fileList) {
       // 当文件上传成功时，更新文件列表并检查是否所有文件都已上传
@@ -327,14 +321,13 @@ export default {
     confirmUpload() {
       // 确认上传后，更新任务状态并关闭对话框
       // 检查文件是否为空或类型不正确
-      const isConfigjsFileValid = this.configjsFile.length > 0 && this.configjsFile.every(file => file.name.endsWith('.js') );
       const isDatajsFileValid = this.datajsFile.length > 0 && this.datajsFile.every(file => file.name.endsWith('.js'));
       const isLablejsFileValid = this.lablejsFile.length > 0 && this.lablejsFile.every(file => file.name.endsWith('.js'));
-      if (this.configjsFile.length === 0 || this.datajsFile.length === 0 || this.lablejsFile.length === 0) {
+      if ( this.datajsFile.length === 0 || this.lablejsFile.length === 0) {
         ElMessage.error('Please upload all required files.');
         return;
       }
-      if (!isConfigjsFileValid || !isDatajsFileValid || !isLablejsFileValid) {
+      if ( !isDatajsFileValid || !isLablejsFileValid) {
         ElMessage.error('Incorrect file type. Please upload the correct file types.');
         return;
       }
@@ -343,13 +336,16 @@ export default {
         this.UploadFiles();
         this.uploadDialogVisible = false;
         this.editDialogVisible = false; // 关闭编辑对话框
-        window.location.reload()
+        //window.location.reload()
+        ElMessage.success('The file upload was successful.');
       }
     },
     async UploadFiles() {
-        await axios.post('/api/insertResult', { taskName: this.selectedTask.task_name });
+        const response = await axios.post('/api/findResultByTaskName?taskName=' + this.selectedTask.task_name);
+        if (response.data.code === 1){
+          await axios.post('/api/insertResult', { taskName: this.selectedTask.task_name });
+        }
         const files = [
-          { file: this.configjsFile[0].raw, fileType: 'configjsFile' },
           { file: this.datajsFile[0].raw, fileType: 'datajsFile' },
           { file: this.lablejsFile[0].raw, fileType: 'lablejsFile' }
         ];
@@ -361,11 +357,11 @@ export default {
           return axios.post('/api/uploadResult', formData);
         });
         await Promise.all(uploadPromises);
-        ElMessage.success('The file upload was successful.');
-        this.configjsFile = [];
+        //ElMessage.success('The file upload was successful.');
         this.datajsFile = [];
         this.lablejsFile = [];
         this.showTaskNameDialog = false; // 成功上传后关闭对话框
+        //ElMessage.success('The file upload was successful.');
     },
     showDownloadFileDialog(task) {
       this.downloadDialogVisible = true;
