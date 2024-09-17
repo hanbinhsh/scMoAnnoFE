@@ -203,6 +203,8 @@ export default {
           return "Processing";
         case 2:
           return "Completed";
+        case -1:
+          return "Error";
         default:
           return "Unknown";
       }
@@ -215,6 +217,8 @@ export default {
           return "warning";
         case 2:
           return "success";
+        case -1:
+          return "error";
         default:
           return "";
       }
