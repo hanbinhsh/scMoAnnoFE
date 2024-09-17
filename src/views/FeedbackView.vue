@@ -54,7 +54,6 @@ export default {
   },
   methods: {
     async submitForm() {
-      // 这里可以添加发送表单数据的逻辑
       console.log('Feedback submitted:', this.feedbackForm);
       if (this.feedbackForm.subject === '' || this.feedbackForm.message === '') {
         ElMessage.error('Please fill in all the fields');
