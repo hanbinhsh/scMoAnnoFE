@@ -21,19 +21,16 @@
       </div>
 
       <!-- 任务列表表格 -->
-      <el-table
-        :data="paginatedTaskList"
-        style="width: 100%"
-        @selection-change="handleSelectionChange"
-        @sort-change="handleSortChange"
-      >
+      <el-table :data="paginatedTaskList" style="width: 100%" @selection-change="handleSelectionChange"
+        @sort-change="handleSortChange">
         <!-- 多选功能 -->
         <el-table-column type="selection" width="55"></el-table-column>
 
         <!-- 用户头像列 -->
         <el-table-column label="Avatar" width="80">
           <template #default="{ row }">
-            <el-avatar :size="24" :src="row.avatarBase64 ? 'data:image/jpeg;base64,' + row.avatarBase64 : defaultAvatar"></el-avatar>
+            <el-avatar :size="24"
+              :src="row.avatarBase64 ? 'data:image/jpeg;base64,' + row.avatarBase64 : defaultAvatar"></el-avatar>
           </template>
         </el-table-column>
         <!-- 显示上传者的用户名 -->
@@ -63,7 +60,7 @@
             <el-tag :type="statusType(row.status)">{{ statusText(row.status) }}</el-tag>
           </template>
         </el-table-column>
-        
+
         <!-- 显示操作列 -->
         <el-table-column fixed="right" label="Operations" width="240">
           <template #default="{ row }">
@@ -84,21 +81,14 @@
       </el-table>
 
       <!-- 分页组件 -->
-      <el-pagination
-        class="pagination"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[5, 10, 20, 50]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="taskList.length"
-      >
+      <el-pagination class="pagination" @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="currentPage" :page-sizes="[5, 10, 20, 50]" :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper" :total="taskList.length">
       </el-pagination>
     </section>
 
     <!-- 批量下载确认对话框 -->
-  <el-dialog v-model="batchDownloadDialogVisible" title="Prompt" width="500">
+    <el-dialog v-model="batchDownloadDialogVisible" title="Prompt" width="500">
       <span>The selected tasks will be downloaded. Are you sure?</span>
       <template #footer>
         <div class="dialog-footer">
@@ -109,17 +99,17 @@
     </el-dialog>
 
     <!-- 单个下载确认对话框 -->
-  <el-dialog v-model="downloadDialogVisible" title="Prompt" width="500" align-center>
-    <span>Task <strong style="color: #e74c3c;">{{ selectedTask.task_name }}</strong> will be downloaded</span>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="downloadDialogVisible = false">Cancel</el-button>
-        <el-button type="success" @click="downloadDialogVisible = false; download()">
-          Confirm
-        </el-button>
-      </div>
-    </template>
-  </el-dialog>
+    <el-dialog v-model="downloadDialogVisible" title="Prompt" width="500" align-center>
+      <span>Task <strong style="color: #e74c3c;">{{ selectedTask.task_name }}</strong> will be downloaded</span>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="downloadDialogVisible = false">Cancel</el-button>
+          <el-button type="success" @click="downloadDialogVisible = false; download()">
+            Confirm
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
 
     <!-- 批量删除确认对话框 -->
     <el-dialog v-model="batchDeleteDialogVisible" title="Batch Delete Confirmation" width="500" align-center>
@@ -142,6 +132,7 @@
             <el-option label="Pending" :value="0"></el-option>
             <el-option label="Processing" :value="1"></el-option>
             <el-option label="Completed" :value="2"></el-option>
+            <el-option label="Error" :value="-1"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -189,17 +180,69 @@
           <el-input v-model="selectedTask.task_name" disabled></el-input>
         </el-form-item>
         <el-form-item label="Status">
-          <el-select v-model="selectedTask.status" placeholder="Select Status">
+          <el-select v-model="selectedTask.status" placeholder="Select Status" @change="handleStatusChange">
             <el-option label="Pending" :value="0"></el-option>
             <el-option label="Processing" :value="1"></el-option>
             <el-option label="Completed" :value="2"></el-option>
+            <el-option label="Error" :value="-1"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="Detail">
+          <el-input v-model="selectedTask.details" type="textarea" placeholder="Please input" />
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="editDialogVisible = false">Cancel</el-button>
           <el-button type="primary" @click="confirmEdit">Save</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+    <el-dialog v-model="uploadDialogVisible" title="Upload Required Files" width="500" align-center
+      @close="closeUploadDialog">
+      <el-form>
+        <!-- 文件上传组件 -->
+        <el-upload v-model:file-list="configjsFile" class="upload" drag action="" :limit="1" :auto-upload="false">
+          <el-icon class="el-icon--upload">
+            <UploadFilled />
+          </el-icon>
+          <div class="el-upload__text">
+            Drop file here or <em>click to upload</em>
+          </div>
+          <template #tip>
+            <div class="el-upload__tip">upload config.js file </div>
+          </template>
+        </el-upload>
+        <el-upload v-model:file-list="datajsFile" class="upload" drag action="" :limit="1" :auto-upload="false">
+          <el-icon class="el-icon--upload">
+            <UploadFilled />
+          </el-icon>
+          <div class="el-upload__text">
+            Drop file here or <em>click to upload</em>
+          </div>
+          <template #tip>
+            <div class="el-upload__tip">upload data.js file </div>
+          </template>
+        </el-upload>
+
+        <el-upload v-model:file-list="lablejsFile" class="upload" drag action="" :limit="1" :auto-upload="false">
+          <el-icon class="el-icon--upload">
+            <UploadFilled />
+          </el-icon>
+          <div class="el-upload__text">
+            Drop file here or <em>click to upload</em>
+          </div>
+          <template #tip>
+            <div class="el-upload__tip">upload lable.js file </div>
+          </template>
+        </el-upload>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="closeUploadDialog">Cancel</el-button>
+          <el-button type="warning" class="action-button" @click="handleResetClick">Reset</el-button>
+          <el-button type="primary" @click="confirmUpload" :disabled="!canUpload">Confirm</el-button>
         </div>
       </template>
     </el-dialog>
@@ -219,6 +262,12 @@ export default {
   },
   data() {
     return {
+
+      uploadDialogVisible: false, // 新增状态，用于控制文件上传对话框的显示
+      configjsFile: [],
+      datajsFile: [],
+      lablejsFile: [],
+      canUpload: true, // 新增状态，用于判断是否可以确认上传
       taskList: [],
       paginatedTaskList: [],
       selectedTasks: [],
@@ -239,6 +288,93 @@ export default {
     };
   },
   methods: {
+    closeUploadDialog() {
+      this.uploadDialogVisible = false;
+      // 当对话框关闭时，将状态设置为 "Processing"
+      this.selectedTask.status = 1; // 1 对应 "Processing"
+    },
+    handleResetClick() {
+      this.configjsFile = [];
+      this.datajsFile = [];
+      this.lablejsFile = [];
+      ElMessage.success('Reset success.');
+    },
+    handleUploadClick() {
+      // 检查文件是否为空或类型不正确
+      const isConfigjsFileValid = this.configjsFile.length > 0 && this.configjsFile.every(file => file.name.endsWith('js'));
+      const isDatajsFileValid = this.datajsFile.length > 0 && this.datajsFile.every(file => file.name.endsWith('.js'));
+      const isLablejsFileValid = this.lablejsFile.length > 0 && this.lablejsFile.every(file => file.name.endsWith('.js'));
+      if (this.configjsFile.length === 0 || this.datajsFile.length === 0 || this.lablejsFile.length === 0) {
+        ElMessage.error('Please upload all required files.');
+        return;
+      }
+      if (!isConfigjsFileValid || !isDatajsFileValid || !isLablejsFileValid) {
+        ElMessage.error('Incorrect file type. Please upload the correct file types.');
+        return;
+      }
+      // 所有检查通过，显示任务名称输入框
+      this.canUpload = true;
+    },
+
+    handleStatusChange(value) {
+      if (value === 2) { // 当选择Completed状态时
+        this.uploadDialogVisible = true; // 显示文件上传对话框
+      }
+      this.value = 1;
+    },
+    handleUploadSuccess(response, file, fileList) {
+      // 当文件上传成功时，更新文件列表并检查是否所有文件都已上传
+      this.fileList[file.name] = fileList;
+      this.checkAllFilesUploaded();
+    },
+    confirmUpload() {
+      // 确认上传后，更新任务状态并关闭对话框
+      // 检查文件是否为空或类型不正确
+      const isConfigjsFileValid = this.configjsFile.length > 0 && this.configjsFile.every(file => file.name.endsWith('.js'));
+      const isDatajsFileValid = this.datajsFile.length > 0 && this.datajsFile.every(file => file.name.endsWith('.js'));
+      const isLablejsFileValid = this.lablejsFile.length > 0 && this.lablejsFile.every(file => file.name.endsWith('.js'));
+      if (this.configjsFile.length === 0 || this.datajsFile.length === 0 || this.lablejsFile.length === 0) {
+        ElMessage.error('Please upload all required files.');
+        return;
+      }
+      if (!isConfigjsFileValid || !isDatajsFileValid || !isLablejsFileValid) {
+        ElMessage.error('Incorrect file type. Please upload the correct file types.');
+        return;
+      }
+      if (this.canUpload) {
+        this.updateTaskStatus(this.selectedTask.task_id, 2);
+        this.UploadFiles();
+        this.uploadDialogVisible = false;
+        this.editDialogVisible = false; // 关闭编辑对话框
+        //window.location.reload()
+        ElMessage.success('The file upload was successful.');
+      }
+    },
+    async UploadFiles() {
+      const response = await axios.post('/api/findResultByTaskName?taskName=' + this.selectedTask.task_name);
+      if (response.data.code === 1) {
+        await axios.post('/api/insertResult', { taskName: this.selectedTask.task_name });
+      }
+      const files = [
+        { file: this.configjsFile[0].raw, fileType: 'configjsFile' },
+        { file: this.datajsFile[0].raw, fileType: 'datajsFile' },
+        { file: this.lablejsFile[0].raw, fileType: 'lablejsFile' }
+      ];
+      const uploadPromises = files.map(({ file, fileType }) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('taskName', this.selectedTask.task_name);
+        formData.append('fileType', fileType);
+        return axios.post('/api/uploadResult', formData);
+      });
+      await Promise.all(uploadPromises);
+      //ElMessage.success('The file upload was successful.');
+      this.configjsFile = [];
+      this.datajsFile = [];
+      this.lablejsFile = [];
+      this.showTaskNameDialog = false; // 成功上传后关闭对话框
+      //ElMessage.success('The file upload was successful.');
+    },
     showDownloadFileDialog(task) {
       this.downloadDialogVisible = true;
       this.selectedTask = task;
@@ -270,7 +406,7 @@ export default {
         const params = new URLSearchParams();
         params.append('taskID', this.selectedTask.task_id);
         params.append('status', this.selectedTask.status);
-
+        params.append('details', this.selectedTask.details);
         await axios.post('/api/updateTaskStatus', params);
         this.fetchTaskList();
         ElMessage.success('Task status updated successfully.');
@@ -295,7 +431,7 @@ export default {
         fetch("/api/download?taskName=" + this.selectedTask.task_name)
           .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+              throw new Error('Network response was not ok');
             }
             return response.blob(); // 获取文件内容作为Blob对象
           })
@@ -303,7 +439,7 @@ export default {
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', this.selectedTask.task_name+".zip"); // or any other extension
+            link.setAttribute('download', this.selectedTask.task_name + ".zip"); // or any other extension
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -350,7 +486,7 @@ export default {
         fetch("/api/download?taskName=" + taskName)
           .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+              throw new Error('Network response was not ok');
             }
             return response.blob(); // 获取文件内容作为Blob对象
           })
@@ -358,7 +494,7 @@ export default {
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', taskName+".zip"); // or any other extension
+            link.setAttribute('download', taskName + ".zip"); // or any other extension
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -441,6 +577,8 @@ export default {
           return "Processing";
         case 2:
           return "Completed";
+        case -1:
+          return "Error";
         default:
           return "Unknown";
       }
@@ -453,6 +591,8 @@ export default {
           return "warning";
         case 2:
           return "success";
+        case -1:
+          return "danger";
         default:
           return "";
       }

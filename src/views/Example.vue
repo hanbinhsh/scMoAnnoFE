@@ -8,6 +8,7 @@
             <template #header>
               <div slot="header" class="card-header">
                 <span>Data Visualization</span>
+                <el-button type="primary" style="float: right;" @click="download()">Download</el-button>
               </div>
             </template>
             <div class="card-body">
@@ -70,7 +71,7 @@ export default {
       sortOrder: '',
       paginatedData: [],
       taskName: this.$route.params.taskName,
-      files: [],
+      isDarkMode:false,
     };
   },
   computed: {
@@ -145,6 +146,10 @@ export default {
       const end = start + this.pageSize;
       this.paginatedData = this.tableData.slice(start, end);
     },
+    // TODO 仅仅在result页面可用
+    download(){
+
+    }
   },
   // 使用beforeRouteEnter钩子来在导航之前触发download方法
   beforeRouteEnter(to, from, next) {  
@@ -157,17 +162,9 @@ export default {
   mounted() {
     this.applySorting();
     this.updatePaginatedData();
-    initializeChart();
-  },
-  computed() {
-    console.log(this.files);
-      if(this.files.length > 0) {
-        this.tableData = this.files[1].map((coord, index) => ({  
-          index: index + 1,  
-          coord,  
-          label: this.files[2][index] || 'N/A',  
-        }));  
-      }    
+    this.isDarkMode = JSON.parse(localStorage.getItem('isDarkMode')) || false;
+    // BUG
+    initializeChart(false);
   },
 };
 </script>
@@ -179,7 +176,7 @@ export default {
   color: #333;
 }
 
-.dark-mode .card-header{
+.dark-mode .card-header {
   color: #EEE;
 }
 
@@ -208,6 +205,6 @@ export default {
 .page-control {
   bottom: 0;
   right: 0;
-  position: relative;
+  position: absolute;
 }
 </style>
