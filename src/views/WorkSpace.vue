@@ -218,7 +218,7 @@ export default {
         case 2:
           return "success";
         case -1:
-          return "error";
+          return "danger";
         default:
           return "";
       }
