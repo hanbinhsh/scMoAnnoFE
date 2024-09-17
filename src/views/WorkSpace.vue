@@ -82,7 +82,7 @@
     <span>{{ selectedTask.details }}</span>
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="primary" @click="showCharts( selectedTask.taskName )">Show charts</el-button>
+        <el-button v-if="selectedTask.status===2" type="primary" @click="showCharts( selectedTask.taskName )">Show charts</el-button>
         <el-button type="primary" @click="detailDialogVisible = false">Confirm</el-button>
       </div>
     </template>
