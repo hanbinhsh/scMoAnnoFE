@@ -48,7 +48,7 @@ import { labels } from "../assets/example_data/label.js";
 import { ElTable, ElTableColumn, ElPagination } from 'element-plus';
 import 'element-plus/theme-chalk/el-table.css';
 import 'element-plus/theme-chalk/el-pagination.css';
-
+import JSZip from 'jszip';
 export default {
   name: "Example",
   components: {
@@ -70,6 +70,7 @@ export default {
       sortOrder: '',
       paginatedData: [],
       taskName: this.$route.params.taskName,
+      files: [],
     };
   },
   computed: {
@@ -92,6 +93,30 @@ export default {
     }
   },
   methods: {
+    async download(taskName) {
+      try {
+        const response = await axios({
+          url: '/downloadResult', // 后端接口
+          method: 'GET',
+          responseType: 'blob', // 重要！用于处理二进制文件流
+          params: {
+            taskName: this.taskName,
+            type: 'data' // 可以根据需要修改为实际的类型
+          }
+        });
+
+        // 创建一个链接元素
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', decodeURI(response.headers['content-disposition'].split('filename*=UTF-8\'\'')[1])); // 从响应头中获取文件名
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      } catch (error) {
+        console.error('下载文件失败:', error);
+      }
+    },
     handlePageChange(page) {
       this.currentPage = page;
     },
@@ -121,10 +146,28 @@ export default {
       this.paginatedData = this.tableData.slice(start, end);
     },
   },
+  // 使用beforeRouteEnter钩子来在导航之前触发download方法
+  beforeRouteEnter(to, from, next) {  
+    next(vm => {  
+      if (to.query.taskName) {
+        vm.download(to.query.taskName); // 注意这里使用 to.query.taskName  
+      }  
+    });  
+  },
   mounted() {
     this.applySorting();
     this.updatePaginatedData();
     initializeChart();
+  },
+  computed() {
+    console.log(this.files);
+      if(this.files.length > 0) {
+        this.tableData = this.files[1].map((coord, index) => ({  
+          index: index + 1,  
+          coord,  
+          label: this.files[2][index] || 'N/A',  
+        }));  
+      }    
   },
 };
 </script>

@@ -120,9 +120,9 @@ export default {
       this.deleteDialogVisible = true;
       this.selectedTask = task;
     },
-    showCharts(taskName) {
-      console.log(taskName);
-      this.$router.push({ name: "Example", params: { taskName } });
+    showCharts(taskName) {  
+      console.log(taskName);  
+      this.$router.push({ name: "Example", query: { taskName } });  
     },
     showDetailDialog(task) {
       this.detailDialogVisible = true;
