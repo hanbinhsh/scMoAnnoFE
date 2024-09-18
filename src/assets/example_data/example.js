@@ -3,18 +3,18 @@ import * as ecStat from 'echarts-stat'; // 导入 echarts-stat 库
 import { data } from './data.js'; // 导入数据
 import { pieces } from './config.js'; // 导入配置
 
-export function initializeChart(dark) {
+export function initializeChart(dark, newChart, newData, newPieces) {
   // 注册聚类算法
   echarts.registerTransform(ecStat.transform.clustering);
 
   // 定义数据和配置
-  const CLUSTER_COUNT = pieces.length;
+  const CLUSTER_COUNT = newChart?newPieces.length:pieces.length;
   const DIENSIION_CLUSTER_INDEX = 2;
 
   const option = {
     dataset: [
       {
-        source: data
+        source: newChart?newData:data,
       },
       {
         transform: {
@@ -36,7 +36,12 @@ export function initializeChart(dark) {
         const clusterIndex = params.value[DIENSIION_CLUSTER_INDEX];
 
         // 查找类别标签
-        const clusterLabel = pieces.find(piece => piece.value === clusterIndex)?.label || `Cluster ${clusterIndex}`;
+        
+        const clusterLabel = newChart 
+            ? newPieces.find(piece => piece.value === clusterIndex)?.label || `Cluster ${clusterIndex}`
+            : pieces.find(piece => piece.value === clusterIndex)?.label || `Cluster ${clusterIndex}`;
+
+        
 
         return `X: ${x}<br>Y: ${y}<br>Cluster: ${clusterLabel}`;
       }
@@ -49,7 +54,7 @@ export function initializeChart(dark) {
       left: 10,
       splitNumber: CLUSTER_COUNT,
       dimension: DIENSIION_CLUSTER_INDEX,
-      pieces: pieces
+      pieces: newChart?newPieces:pieces
     },
     grid: {
       left: 120
@@ -67,8 +72,14 @@ export function initializeChart(dark) {
     }
   };
 
+
   // 初始化图表
   const chartDom = document.getElementById('main');
+  let myChart1 = echarts.getInstanceByDom(chartDom); // 获取已有实例
+
+if (myChart1) {
+  myChart1.dispose(); // 销毁已有实例
+}
   if(dark){
     const myChart = echarts.init(chartDom, 'dark');
     myChart.setOption(option);

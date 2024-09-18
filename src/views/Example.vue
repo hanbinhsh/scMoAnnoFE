@@ -49,7 +49,8 @@ import { labels } from "../assets/example_data/label.js";
 import { ElTable, ElTableColumn, ElPagination } from 'element-plus';
 import 'element-plus/theme-chalk/el-table.css';
 import 'element-plus/theme-chalk/el-pagination.css';
-import JSZip from 'jszip';
+import axios from 'axios';
+import { pieces } from "@/assets/example_data/config";
 export default {
   name: "Example",
   components: {
@@ -94,29 +95,54 @@ export default {
     }
   },
   methods: {
-    async download(taskName) {
-      try {
-        const response = await axios({
-          url: '/downloadResult', // 后端接口
-          method: 'GET',
-          responseType: 'blob', // 重要！用于处理二进制文件流
-          params: {
-            taskName: this.taskName,
-            type: 'data' // 可以根据需要修改为实际的类型
-          }
-        });
+    async downloadResult(taskName) {
 
-        // 创建一个链接元素
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', decodeURI(response.headers['content-disposition'].split('filename*=UTF-8\'\'')[1])); // 从响应头中获取文件名
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-      } catch (error) {
-        console.error('下载文件失败:', error);
-      }
+        const formData = new FormData();
+        formData.append('taskName', taskName);
+        formData.append('type', 'data');
+        const response = await axios.post('/api/downloadResult', formData);
+
+        let newData = response.data.replace('export const data = ', '');
+        newData = newData.replace(';', '');
+        newData = JSON.parse(newData);
+      
+        const formData2 = new FormData();
+        formData2.append('taskName', taskName);
+        formData2.append('type', 'label');
+        const response2 = await axios.post('/api/downloadResult', formData2);
+
+        let newLabel = response2.data.replace('export const labels = ', '');
+        newLabel = newLabel.replace(';', '');
+        newLabel = JSON.parse(newLabel);
+
+
+        const formData3 = new FormData();
+        formData3.append('taskName', taskName);
+        formData3.append('type', 'config');
+        const response3 = await axios.post('/api/downloadResult', formData3);
+
+        const match = response3.data.match(/export const pieces = (.*?);/);
+
+        if (match && match[1]) {
+          let piecesString = match[1].trim();
+          piecesString = piecesString.replace(/'/g, '"');
+          
+          let pieces = JSON.parse(piecesString);
+          console.log(pieces); // 打印出 pieces 数组
+          
+        } else {
+            console.error('未找到 pieces 的内容');
+        }
+
+        this.tableData = newData.map((coord, index) => ({
+          index: index + 1,
+          coord,
+          label: newLabel[index] || 'N/A',
+        }));
+
+      this.applySorting();
+      this.updatePaginatedData();
+      initializeChart(false, true, newData, pieces);
     },
     handlePageChange(page) {
       this.currentPage = page;
@@ -146,16 +172,14 @@ export default {
       const end = start + this.pageSize;
       this.paginatedData = this.tableData.slice(start, end);
     },
-    // TODO 仅仅在result页面可用
-    download(){
-
+    download() {
+      
     }
   },
-  // 使用beforeRouteEnter钩子来在导航之前触发download方法
   beforeRouteEnter(to, from, next) {  
     next(vm => {  
       if (to.query.taskName) {
-        vm.download(to.query.taskName); // 注意这里使用 to.query.taskName  
+        vm.downloadResult(to.query.taskName); 
       }  
     });  
   },
@@ -164,7 +188,7 @@ export default {
     this.updatePaginatedData();
     this.isDarkMode = JSON.parse(localStorage.getItem('isDarkMode')) || false;
     // BUG
-    initializeChart(false);
+    initializeChart(false, false);
   },
 };
 </script>

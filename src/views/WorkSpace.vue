@@ -121,7 +121,6 @@ export default {
       this.selectedTask = task;
     },
     showCharts(taskName) {  
-      console.log(taskName);  
       this.$router.push({ name: "Example", query: { taskName } });  
     },
     showDetailDialog(task) {
