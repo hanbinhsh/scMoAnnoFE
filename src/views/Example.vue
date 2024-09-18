@@ -26,7 +26,7 @@
                         {{ `(${row.coord[0]}, ${row.coord[1]})` }}
                       </template>
                     </el-table-column>
-                    <el-table-column prop="label" label="Label" width="70" sortable></el-table-column>
+                    <el-table-column prop="label" label="Label" width="120" sortable></el-table-column>
                   </el-table>
                   <el-pagination background layout="prev, pager, next" :total="totalItems" :page-size="pageSize"
                     :current-page="currentPage" @current-change="handlePageChange" class="page-control">
