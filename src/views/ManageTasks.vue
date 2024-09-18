@@ -419,7 +419,9 @@ export default {
     },
     async deleteTask() {
       try {
-        const response = await axios.get("/api/deleteTaskByID?taskID=" + this.selectedTask.task_id);
+        const taskID = this.selectedTask.task_id;
+        const taskName = this.selectedTask.task_name; 
+        const response = await axios.get(`/api/deleteTaskByID?taskID=${taskID}&taskName=${taskName}`);
         ElMessage.success('Delete success.');
         this.fetchTaskList();
       } catch (error) {
