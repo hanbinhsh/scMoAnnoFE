@@ -346,7 +346,7 @@ export default {
         this.UploadFiles();
         this.uploadDialogVisible = false;
         this.editDialogVisible = false; // 关闭编辑对话框
-        //window.location.reload()
+        window.location.reload()
         ElMessage.success('The file upload was successful.');
       }
     },
@@ -535,7 +535,7 @@ export default {
         const params = new URLSearchParams();
         params.append('taskID', taskID);
         params.append('status', status);
-
+        params.append('details', this.selectedTask.details);
         await axios.post('/api/updateTaskStatus', params);
       } catch (error) {
         console.error("Update failed:", error);
