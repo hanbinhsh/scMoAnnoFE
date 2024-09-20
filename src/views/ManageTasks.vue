@@ -88,7 +88,7 @@
     </section>
 
     <!-- 批量下载确认对话框 -->
-    <el-dialog v-model="batchDownloadDialogVisible" title="Prompt" width="500">
+    <el-dialog v-model="batchDownloadDialogVisible" title="Download" width="500">
       <span>The selected tasks will be downloaded. Are you sure?</span>
       <template #footer>
         <div class="dialog-footer">
@@ -99,7 +99,7 @@
     </el-dialog>
 
     <!-- 单个下载确认对话框 -->
-    <el-dialog v-model="downloadDialogVisible" title="Prompt" width="500" align-center>
+    <el-dialog v-model="downloadDialogVisible" title="Download" width="500" align-center>
       <span>Task <strong style="color: #e74c3c;">{{ selectedTask.task_name }}</strong> will be downloaded</span>
       <template #footer>
         <div class="dialog-footer">
