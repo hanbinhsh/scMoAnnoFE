@@ -51,6 +51,7 @@ import 'element-plus/theme-chalk/el-table.css';
 import 'element-plus/theme-chalk/el-pagination.css';
 import axios from 'axios';
 import { pieces } from "@/assets/example_data/config";
+import * as echarts from 'echarts';
 export default {
   name: "Example",
   components: {
@@ -173,7 +174,32 @@ export default {
       this.paginatedData = this.tableData.slice(start, end);
     },
     download() {
-      
+      const chartDom = document.getElementById('main');
+      let myChart1 = echarts.getInstanceByDom(chartDom);
+      // 导出单个图表图片
+      var img = new Image();
+      img.src = myChart1.getDataURL({
+        type: "png",
+        pixelRatio: 1, //放大2倍
+        backgroundColor: "#fff",
+      });
+      img.onload = function () {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL("image/png");
+    
+        var a = document.createElement("a");
+        var event = new MouseEvent("click");
+        a.download = "pic.png" || "picname";
+        // 将生成的URL设置为a.href属性
+        a.href = dataURL;
+        // 触发a的单击事件
+        a.dispatchEvent(event);
+        a.remove();
+      }
     }
   },
   beforeRouteEnter(to, from, next) {  

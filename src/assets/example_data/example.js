@@ -8,13 +8,13 @@ export function initializeChart(dark, newChart, newData, newPieces) {
   echarts.registerTransform(ecStat.transform.clustering);
 
   // 定义数据和配置
-  const CLUSTER_COUNT = newChart?newPieces.length:pieces.length;
+  const CLUSTER_COUNT = newChart ? newPieces.length : pieces.length;
   const DIENSIION_CLUSTER_INDEX = 2;
 
   const option = {
     dataset: [
       {
-        source: newChart?newData:data,
+        source: newChart ? newData : data,
       },
       {
         transform: {
@@ -36,12 +36,12 @@ export function initializeChart(dark, newChart, newData, newPieces) {
         const clusterIndex = params.value[DIENSIION_CLUSTER_INDEX];
 
         // 查找类别标签
-        
-        const clusterLabel = newChart 
-            ? newPieces.find(piece => piece.value === clusterIndex)?.label || `Cluster ${clusterIndex}`
-            : pieces.find(piece => piece.value === clusterIndex)?.label || `Cluster ${clusterIndex}`;
 
-        
+        const clusterLabel = newChart
+          ? newPieces.find(piece => piece.value === clusterIndex)?.label || `Cluster ${clusterIndex}`
+          : pieces.find(piece => piece.value === clusterIndex)?.label || `Cluster ${clusterIndex}`;
+
+
 
         return `X: ${x}<br>Y: ${y}<br>Cluster: ${clusterLabel}`;
       }
@@ -54,7 +54,7 @@ export function initializeChart(dark, newChart, newData, newPieces) {
       left: 10,
       splitNumber: CLUSTER_COUNT,
       dimension: DIENSIION_CLUSTER_INDEX,
-      pieces: newChart?newPieces:pieces
+      pieces: newChart ? newPieces : pieces
     },
     grid: {
       left: 120
@@ -77,13 +77,13 @@ export function initializeChart(dark, newChart, newData, newPieces) {
   const chartDom = document.getElementById('main');
   let myChart1 = echarts.getInstanceByDom(chartDom); // 获取已有实例
 
-if (myChart1) {
-  myChart1.dispose(); // 销毁已有实例
-}
-  if(dark){
+  if (myChart1) {
+    myChart1.dispose(); // 销毁已有实例
+  }
+  if (dark) {
     const myChart = echarts.init(chartDom, 'dark');
     myChart.setOption(option);
-  }else{
+  } else {
     const myChart = echarts.init(chartDom);
     myChart.setOption(option);
   }
